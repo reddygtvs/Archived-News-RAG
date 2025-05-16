@@ -1,0 +1,82 @@
+[
+  {
+    "id": "Q01_ParisAgreementTargets",
+    "query": "What specific numerical targets for temperature limits and climate finance were included in the final Paris Agreement text adopted in December 2015?"
+  },
+  {
+    "id": "Q02_CharlieHebdoResponse",
+    "query": "Describe the immediate security measures and political statements made by French leaders in the 24-48 hours following the Charlie Hebdo attack in January 2015."
+  },
+  {
+    "id": "Q03_GreekReferendumArgs",
+    "query": "What were the main arguments presented by the 'Oxi' (No) campaign during the Greek bailout referendum in July 2015?"
+  },
+  {
+    "id": "Q04_IranDealVerification",
+    "query": "According to the JCPOA agreement finalized in 2015, what were some key ways international inspectors would verify Iran's compliance?"
+  },
+  {
+    "id": "Q05_SanBernardinoInitial",
+    "query": "Based on reporting from December 2-3, 2015, what was initially known about the identities and motives of the San Bernardino attackers?"
+  },
+  {
+    "id": "Q06_UK_ElectionSeats",
+    "query": "Which party won the UK General Election in May 2015, and what was the approximate seat count for the major parties?"
+  },
+  {
+    "id": "Q07_VW_ScandalBreak",
+    "query": "How did the news of the Volkswagen emissions 'defeat device' first become public knowledge in September 2015?"
+  },
+  {
+    "id": "Q08_NepalQuakeDamage",
+    "query": "Describe the scale of damage and the humanitarian situation reported in Nepal immediately following the major earthquake in April 2015."
+  },
+  {
+    "id": "Q09_MigrantRouteConditions",
+    "query": "What were the conditions reported for migrants and refugees traveling through the Balkans towards Western Europe during the summer of 2015?"
+  },
+  {
+    "id": "Q10_RussiaSyriaIntervention",
+    "query": "What reasons were reported when Russia began direct military intervention in the Syrian Civil War in late September 2015?"
+  },
+  {
+    "id": "Q11_AshleyMadisonHack",
+    "query": "What information was compromised and what were the immediate consequences reported after the Ashley Madison data breach became public in July/August 2015?"
+  },
+  {
+    "id": "Q12_FIFA_CorruptionArrests",
+    "query": "Who were some of the key FIFA officials arrested in Switzerland in May 2015, and what were the initial charges reported?"
+  },
+  {
+    "id": "Q13_GermanwingsCrashCause",
+    "query": "What was the determined cause of the Germanwings Flight 9525 crash in the French Alps in March 2015 based on initial investigations?"
+  },
+  {
+    "id": "Q14_PlutoFlybyDiscoveries",
+    "query": "What were some of the surprising initial discoveries or images revealed by the New Horizons spacecraft during its Pluto flyby in July 2015?"
+  },
+  {
+    "id": "Q15_COP21_KeyPlayers",
+    "query": "Besides France, which countries or leaders were reported as playing crucial roles in brokering the final deal at the COP21 climate conference in December 2015?"
+  },
+  {
+    "id": "Q16_BaltimoreProtestsTrigger",
+    "query": "What specific event triggered the widespread protests and unrest in Baltimore, Maryland, in April 2015?"
+  },
+  {
+    "id": "Q17_YemenConflictEscalation",
+    "query": "Describe the escalation of the conflict in Yemen in March 2015, particularly the involvement of the Saudi-led coalition."
+  },
+  {
+    "id": "Q18_ChinaStockMarketCrash",
+    "query": "What were the main characteristics and reported causes of the Chinese stock market turbulence experienced in mid-2015?"
+  },
+  {
+    "id": "Q19_US_CubaRelations",
+    "query": "What significant steps were taken towards normalizing relations between the United States and Cuba during 2015?"
+  },
+  {
+    "id": "Q20_TemporalTrap_Ebola",
+    "query": "What is the current status of the Ebola outbreak that heavily affected West Africa?"
+  }
+]

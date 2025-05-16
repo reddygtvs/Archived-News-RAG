@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+pip-freeze.txt # Often generated, requirements.txt is usually curated
+
+# IDE / OS specific
+.vscode/
+.idea/
+*.DS_Store
+*. MappedDeepSourceTRUE*
+
+# Environment variables
+.env
+
+# Data files (large, generated, or sensitive)
+backend/data/guardian_articles.jsonl
+backend/data/processed_chunks.jsonl
+backend/data/article_lookup.pkl
+backend/data/article_text_lookup.pkl 
+backend/data/news_index.faiss
+backend/data/metadata.json
+backend/data/evaluation_results.jsonl 
+backend/data/evaluation_results_v2.jsonl 
+backend/data/plots_final_automated/ 
+
+# Node modules 
+frontend/node_modules/
+
+# Frontend build artifacts 
+frontend/dist/
+frontend/.vite/ # Vite specific cache/build
+*.log
