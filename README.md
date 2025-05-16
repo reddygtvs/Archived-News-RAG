@@ -43,7 +43,7 @@ archived-news-rag/
 │   ├── package.json                # Node dependencies
 │   └── vite.config.ts              # Vite configuration
 └── README.md                       # This file
-
+````
 
 ## Setup
 
