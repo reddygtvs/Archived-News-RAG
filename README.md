@@ -16,7 +16,7 @@ The evaluation framework includes automated metric collection and an LLM-based a
 
 ## Project Structure
 
-````text
+```text
 archived-news-rag/
 ├── backend/
 │   ├── data/                       # Stores fetched data, indexes, results, plots
@@ -43,7 +43,7 @@ archived-news-rag/
 │   ├── package.json                # Node dependencies
 │   └── vite.config.ts              # Vite configuration
 └── README.md                       # This file
-````
+```
 
 ## Setup
 
@@ -102,12 +102,13 @@ This script fetches articles from The Guardian API for the year 2015.
 
 - Ensure your API keys are correctly set in `backend/.env`.
 - Run from the `backend` directory:
+
   ```bash
   # If venv is active:
   python data_fetcher.py
   # Or explicitly:
   # ./venv/bin/python data_fetcher.py
-````
+  ```
 
 - This will create `backend/data/guardian_articles.jsonl`. This step can take a significant amount of time depending on the number of articles (for full 2015, approx. 118k articles, allow several hours and monitor for API limits/errors).
 
