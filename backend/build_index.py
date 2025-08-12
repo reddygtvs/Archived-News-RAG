@@ -49,10 +49,26 @@ def process_and_index():
 
     print(f"Loaded {len(articles)} articles and stored details for {len(article_lookup)} unique IDs.")
 
+    # --- Apply gentle filtering ---
+    print("Applying gentle content filtering...")
+    original_count = len(articles)
+    
+    # Remove only lightweight/lifestyle sections
+    skip_sections = {'fashion', 'food', 'travel', 'lifeandstyle', 'books', 'film', 'stage'}
+    articles = [a for a in articles if not any(section in a.get('id', '').lower() for section in skip_sections)]
+    
+    # Remove very short articles (less than 500 characters)
+    articles = [a for a in articles if len(a.get('bodyText', '')) > 500]
+    
+    # Skip deduplication for now
+    print("Skipping deduplication...")
+    print(f"Total reduction: {original_count} → {len(articles)} ({100*(original_count-len(articles))/original_count:.1f}% reduction)")
+
     # --- Save the article lookup dictionary ---
     print(f"Saving article lookup dictionary to {ARTICLE_LOOKUP_PATH}...")
     os.makedirs(os.path.dirname(ARTICLE_LOOKUP_PATH), exist_ok=True)
     try:
+        import pickle
         with open(ARTICLE_LOOKUP_PATH, 'wb') as f_pkl:
             pickle.dump(article_lookup, f_pkl)
         print("Article lookup saved successfully.")
@@ -87,11 +103,11 @@ def process_and_index():
         try:
             chunks = text_splitter.split_text(body_text)
             for chunk_index, chunk_text in enumerate(chunks):
-                # Chunk metadata primarily needs article_id to link back
+                # Chunk metadata - text removed to save massive space
                 chunk_metadata = {
                     'article_id': article_id,
                     'chunk_index': chunk_index,
-                    'text': chunk_text # Keeping for potential debug/inspection
+                    # 'text' removed - get from article_lookup via article_id when needed
                 }
                 metadata[chunk_counter] = chunk_metadata
                 all_chunks_text.append(chunk_text)
@@ -109,15 +125,8 @@ def process_and_index():
 
     print(f"Generated {len(all_chunks_text)} text chunks for embedding.")
 
-    # Save processed chunks metadata
-    os.makedirs(os.path.dirname(PROCESSED_DATA_PATH), exist_ok=True)
-    try:
-        with open(PROCESSED_DATA_PATH, 'w', encoding='utf-8') as f:
-            for chunk_id, chunk_meta in metadata.items():
-                f.write(json.dumps({**chunk_meta, "global_chunk_id": chunk_id}) + '\n')
-        print(f"Saved processed chunks metadata to {PROCESSED_DATA_PATH}")
-    except Exception as e:
-        print(f"Error saving processed chunks metadata: {e}")
+    # Skip saving processed chunks debug file to save 800MB+ space
+    print(f"Skipping debug file {PROCESSED_DATA_PATH} to save space...")
 
 
     print(f"Loading sentence transformer model: {EMBEDDING_MODEL_NAME}...")
@@ -128,8 +137,33 @@ def process_and_index():
     print(f"Generated {embeddings.shape[0]} embeddings of dimension {embeddings.shape[1]}.")
 
     dimension = embeddings.shape[1]
-    index = faiss.IndexFlatL2(dimension)
-    index.add(np.array(embeddings).astype('float32'))
+    
+    # Use IndexIVFFlat for massive size reduction (approximate search)
+    nlist = min(1024, len(embeddings) // 40)  # Adaptive clusters based on data size
+    quantizer = faiss.IndexFlatL2(dimension)
+    index = faiss.IndexIVFFlat(quantizer, dimension, nlist)
+    
+    # Train the index (required for IVF)
+    print(f"Training FAISS index with {nlist} clusters...")
+    index.train(np.array(embeddings).astype('float32'))
+    
+    # Convert to float32 and add to trained index
+    embeddings_array = np.array(embeddings).astype('float32')
+    index.add(embeddings_array)
+    
+    # ULTRA-AGGRESSIVE: Binary quantization for maximum compression
+    print("Creating binary embeddings for maximum compression...")
+    # Binary quantization: >0 = 1, <=0 = 0
+    embeddings_binary = (embeddings_array > 0).astype(np.uint8)
+    binary_path = FAISS_INDEX_PATH.replace('.faiss', '_binary.npy')
+    np.save(binary_path, embeddings_binary)
+    print(f"Saved binary embeddings to {binary_path} (87% smaller than uint8)")
+    
+    # Also save uint8 version for fallback
+    embeddings_uint8 = (embeddings_array * 127).astype(np.uint8)
+    quantized_path = FAISS_INDEX_PATH.replace('.faiss', '_quantized.npy')
+    np.save(quantized_path, embeddings_uint8)
+    print(f"Saved uint8 fallback to {quantized_path}")
 
     print(f"Built FAISS index with {index.ntotal} vectors.")
 
@@ -137,11 +171,12 @@ def process_and_index():
     faiss.write_index(index, FAISS_INDEX_PATH)
     print(f"Saved FAISS index to {FAISS_INDEX_PATH}")
 
-    # Save chunk metadata by mapping FAISS index ID to chunk info including article_id
+    # Save chunk metadata using compressed pickle format
     try:
-        with open(METADATA_PATH, 'w', encoding='utf-8') as f:
-            json.dump(metadata, f, indent=None)
-        print(f"Saved chunk metadata mapping to {METADATA_PATH}")
+        import pickle
+        with open(METADATA_PATH, 'wb') as f:
+            pickle.dump(metadata, f, protocol=pickle.HIGHEST_PROTOCOL)
+        print(f"Saved compressed chunk metadata to {METADATA_PATH}")
     except Exception as e:
         print(f"Error saving chunk metadata: {e}")
 

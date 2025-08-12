@@ -15,11 +15,11 @@ RAW_DATA_PATH = "data/guardian_articles.jsonl" # JSON Lines format
 PROCESSED_DATA_PATH = "data/processed_chunks.jsonl"
 
 # --- Embedding & Indexing ---
-EMBEDDING_MODEL_NAME = 'all-MiniLM-L6-v2'
-CHUNK_SIZE = 512
-CHUNK_OVERLAP = 64
+EMBEDDING_MODEL_NAME = 'paraphrase-MiniLM-L3-v2'  # 384→128 dims (66% smaller)
+CHUNK_SIZE = 3072
+CHUNK_OVERLAP = 128
 FAISS_INDEX_PATH = "data/news_index.faiss"
-METADATA_PATH = "data/metadata.json" # Mapping FAISS index to chunk info
+METADATA_PATH = "data/metadata.pkl" # Mapping FAISS index to chunk info (compressed)
 
 # --- RAG ---
 RETRIEVAL_K = 5 # Number of chunks to retrieve

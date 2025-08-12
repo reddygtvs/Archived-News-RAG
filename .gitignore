@@ -33,3 +33,13 @@ frontend/node_modules/
 frontend/dist/
 frontend/.vite/ # Vite specific cache/build
 *.log
+
+# Claude IDE
+.claude/
+
+# Generated data files
+backend/data/
+backend/data/metadata.pkl
+backend/data/news_index_binary.npy
+backend/a_data/news_index_quantized.npy
+backend/data_backup/

@@ -11,7 +11,7 @@ log = logging.getLogger('werkzeug') # Get Flask's default logger
 log.setLevel(logging.INFO)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}) # Adjust port if needed
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://localhost:5174"]}}) # Support both ports
 
 # --- Initialize RAG System ---
 try:

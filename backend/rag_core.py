@@ -125,6 +125,12 @@ class RAGSystem:
             index = faiss.read_index(FAISS_INDEX_PATH)
             logger.info(f"FAISS index loaded with {index.ntotal} vectors.")
             if index.ntotal == 0: logger.warning("FAISS index is empty!")
+            
+            # Set nprobe for IVF indexes (controls search accuracy vs speed)
+            if hasattr(index, 'nprobe'):
+                index.nprobe = min(32, index.nlist // 4)  # Good balance of speed/accuracy
+                logger.info(f"Set FAISS nprobe to {index.nprobe} for optimized search")
+            
             return index
         except Exception as e:
             logger.error(f"CRITICAL: Error loading FAISS index from {FAISS_INDEX_PATH}: {e}.", exc_info=True)
@@ -137,8 +143,10 @@ class RAGSystem:
              logger.error(f"CRITICAL: Metadata file not found: {METADATA_PATH}")
              raise FileNotFoundError(f"Metadata file missing. Run build_index.py again: {METADATA_PATH}")
         try:
-            with open(METADATA_PATH, 'r', encoding='utf-8') as f:
-                metadata_loaded = json.load(f)
+            # Load from compressed pickle format
+            import pickle
+            with open(METADATA_PATH, 'rb') as f:
+                metadata_loaded = pickle.load(f)
                 # convert to int keys, fallback to string keys if error
                 try:
                     metadata_processed = {int(k): v for k, v in metadata_loaded.items()}
@@ -368,7 +376,7 @@ Instructions:
 1. Analyze the full text provided in the "Context" section below to answer the "Question". Each article's text is clearly marked with [ARTICLE START | URL: <URL> | DATE: <DATE>] and [ARTICLE END].
 2. Synthesize information *across* the provided articles if they cover the same topic from different angles.
 3. Extract specific details, names, dates, opinions, and arguments directly from the article text.
-4. **Crucially: When using information from a specific article, CITE IT using the URL found in its START marker. For example: "(according to URL: <URL>)" or "The article at URL: <URL> states...".** Do not cite URLs not present in the context markers.
+4. **Crucially: When using information from a specific article, CITE IT using numbered references like [1], [2], [3] etc. corresponding to the article numbers. For example: "According to reports [1]" or "The article states [2]".** Use clean numbered citations instead of full URLs.
 5. If the provided articles are relevant but don't fully answer the question, use your general knowledge to supplement BUT explicitly state that you are adding information beyond the provided 2015 articles.
 6. If the provided articles seem completely irrelevant, state that the 2015 context was not helpful and answer based on your general knowledge.
 7. Answer the specific question asked comprehensively, using the depth provided by the full articles.

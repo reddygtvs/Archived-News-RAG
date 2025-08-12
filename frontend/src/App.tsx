@@ -1,47 +1,16 @@
 // frontend/src/App.tsx
-import React, { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
-import ReactMarkdown from "react-markdown";
-import {
-  CssBaseline,
-  Container,
-  TextField,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  CircularProgress,
-  Box,
-  Link,
-  Paper,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Divider,
-  Alert,
-  Chip,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import "./App.css";
+import "./index.css";
+import { ApiResponse, RetrievedContextItem } from "./types";
+import { sampleQuestions } from "./data/sampleQuestions";
+import Header from "./components/Header";
+import SampleQuestions from "./components/SampleQuestions";
+import QueryForm from "./components/QueryForm";
+import ResponseCards from "./components/ResponseCards";
 
-const API_URL = "http://localhost:5001/api/query"; // Match Flask port
+const API_URL = "http://localhost:5001/api/query";
 
-interface RetrievedContextItem {
-  text: string;
-  source: string;
-  title: string;
-  date: string;
-  article_id?: string;
-  min_distance?: number;
-}
-
-interface ApiResponse {
-  standard_response: string;
-  rag_response: string;
-  retrieved_chunks: RetrievedContextItem[];
-  error?: string;
-}
 
 function App() {
   const [query, setQuery] = useState<string>("");
@@ -57,6 +26,10 @@ function App() {
     setQuery(event.target.value);
   };
 
+  const handleQuestionSelect = (question: string) => {
+    setQuery(question);
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!query.trim()) {
@@ -68,7 +41,7 @@ function App() {
     setError("");
     setStandardResponse("");
     setRagResponse("");
-    setRetrievedContext([]); // To clear previous context
+    setRetrievedContext([]);
 
     try {
       const response = await axios.post<ApiResponse>(API_URL, { query });
@@ -92,303 +65,54 @@ function App() {
     }
   };
 
-  // Helper to format date string or return 'N/A'
-  const formatDate = (dateString: string | undefined | null) => {
-    if (!dateString) return "N/A";
-    try {
-      return new Date(dateString).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    } catch (e) {
-      return dateString; // Return original if parsing fails
-    }
-  };
-
   return (
-    <>
-      <CssBaseline />
-      <Container
-        maxWidth="xl"
-        sx={{ paddingY: "2rem", paddingX: { xs: "1rem", md: "2rem" } }}
-      >
-        <Typography variant="h4" gutterBottom align="center" component="h1">
-          Archived News RAG vs. Standard LLM
-        </Typography>
-        {/* Style hack */}
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          align="center"
-          color="textSecondary"
-          sx={{ mb: 3 }}
-        >
-          Querying events from The Guardian's 2015 Archive
-        </Typography>
+    <div className="min-h-screen" style={{backgroundColor: '#0d0d0d'}}>
+      <Header />
+      
+      <main className="pt-20 max-w-6xl mx-auto px-5 py-8">
+        <div className="text-center mb-16 py-8">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{textShadow: '0 0 30px rgba(57, 255, 20, 0.4)'}}>
+            Compare AI Responses
+          </h1>
+          <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-4">
+            Experience the difference between standard LLM and RAG-enhanced responses using
+          </p>
+          <span 
+            className="text-2xl font-bold text-green-400"
+            style={{
+              background: 'linear-gradient(90deg, #7dd3fc, #4ade80, #22c55e, #10b981, #34d399)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline-block'
+            }}
+          >
+            The Guardian's 2015 Archive
+          </span>
+        </div>
 
-        <Paper
-          elevation={3}
-          sx={{
-            padding: "1.5rem",
-            marginBottom: "2.5rem",
-            borderRadius: "8px",
-          }}
-        >
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Enter your query about events/topics from 2015"
-              variant="outlined"
-              value={query}
-              onChange={handleQueryChange}
-              disabled={loading}
-              margin="normal"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              size="large"
-              sx={{ marginTop: "1rem", display: "block", mx: "auto" }}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Ask"}
-            </Button>
-          </form>
-          {error && (
-            <Alert severity="error" sx={{ marginTop: "1.5rem" }}>
-              {error}
-            </Alert>
-          )}
-        </Paper>
+        <SampleQuestions 
+          sampleQuestions={sampleQuestions}
+          onQuestionSelect={handleQuestionSelect}
+        />
 
-        <Grid container spacing={4}>
-          {/* Standard LLM Response */}
-          <Grid item xs={12} md={6}>
-            <Card
-              variant="outlined"
-              sx={{ height: "100%", borderRadius: "8px" }}
-            >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
-                <Typography variant="h6" gutterBottom component="h2">
-                  Standard LLM Response
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    overflowY: "auto",
-                    maxHeight: "60vh",
-                    pr: 1,
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {" "}
-                  {/* Added wordBreak to make things more manageable on the view */}
-                  {loading && !standardResponse ? (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      height="100%"
-                    >
-                      <CircularProgress />
-                    </Box>
-                  ) : standardResponse ? (
-                    // --- USE REACT-MARKDOWN ---
-                    <ReactMarkdown
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <Typography variant="body1" paragraph {...props} />
-                        ),
-                        h1: ({ node, ...props }) => (
-                          <Typography variant="h4" {...props} />
-                        ),
-                      }}
-                    >
-                      {standardResponse}
-                    </ReactMarkdown>
-                  ) : (
-                    <Typography variant="body2" color="textSecondary">
-                      No response yet or an error occurred.
-                    </Typography>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+        <QueryForm
+          query={query}
+          loading={loading}
+          error={error}
+          onQueryChange={handleQueryChange}
+          onSubmit={handleSubmit}
+        />
 
-          {/* RAG Response */}
-          <Grid item xs={12} md={6}>
-            <Card
-              variant="outlined"
-              sx={{ height: "100%", borderRadius: "8px" }}
-            >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
-                <Typography variant="h6" gutterBottom component="h2">
-                  RAG Response (with 2015 News Context)
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    overflowY: "auto",
-                    maxHeight: "60vh",
-                    pr: 1,
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {" "}
-                  {/* Added wordBreak */}
-                  {loading && !ragResponse ? (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      height="100%"
-                    >
-                      <CircularProgress />
-                    </Box>
-                  ) : ragResponse ? (
-                    <ReactMarkdown
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <Typography variant="body1" paragraph {...props} />
-                        ),
-                      }}
-                    >
-                      {ragResponse}
-                    </ReactMarkdown>
-                  ) : (
-                    <Typography variant="body2" color="textSecondary">
-                      No response yet or an error occurred.
-                    </Typography>
-                  )}
-                  {/* Retrieved Context Section */}
-                  {retrievedContext.length > 0 && (
-                    <Accordion
-                      sx={{
-                        marginTop: "1.5rem",
-                        border: "1px solid #e0e0e0",
-                        boxShadow: "none",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="retrieved-context-panel-content"
-                        id="retrieved-context-panel-header"
-                      >
-                        <Typography variant="subtitle1">
-                          Retrieved Context ({retrievedContext.length} article
-                          {retrievedContext.length !== 1 ? "s" : ""})
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails
-                        sx={{
-                          maxHeight: "300px",
-                          overflowY: "auto",
-                          display: "block",
-                          backgroundColor: "#f9f9fa",
-                          p: 1.5,
-                        }}
-                      >
-                        {retrievedContext.map((item, index) => (
-                          <Paper
-                            key={item.article_id || index}
-                            variant="outlined"
-                            sx={{
-                              padding: "1rem",
-                              marginBottom: "1rem",
-                              backgroundColor: "#fff",
-                              borderRadius: "4px",
-                            }}
-                          >
-                            <Typography
-                              variant="subtitle2"
-                              component="h3"
-                              gutterBottom
-                            >
-                              {item.title !== "Source Title Missing" &&
-                              item.title ? (
-                                item.source !== "Source URL Missing" &&
-                                item.source ? (
-                                  <Link
-                                    href={item.source}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    underline="hover"
-                                  >
-                                    {item.title}
-                                  </Link>
-                                ) : (
-                                  item.title
-                                )
-                              ) : item.source !== "Source URL Missing" &&
-                                item.source ? (
-                                <Link
-                                  href={item.source}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  underline="hover"
-                                >
-                                  {item.source}
-                                </Link>
-                              ) : (
-                                "Retrieved Article " + (index + 1)
-                              )}
-                            </Typography>
-                            <Chip
-                              label={`Date: ${formatDate(item.date)}`}
-                              size="small"
-                              sx={{ mb: 1, mr: 1 }}
-                            />
-                            {typeof item.min_distance === "number" && (
-                              <Chip
-                                label={`Relevance Score (Dist): ${item.min_distance.toFixed(
-                                  4
-                                )}`}
-                                size="small"
-                                variant="outlined"
-                                sx={{ mb: 1 }}
-                              />
-                            )}
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                mt: 1,
-                                maxHeight: "100px",
-                                overflowY: "auto",
-                                color: "text.secondary",
-                              }}
-                            >
-                              {item.text}
-                            </Typography>
-                          </Paper>
-                        ))}
-                      </AccordionDetails>
-                    </Accordion>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
-    </>
+        {(standardResponse || ragResponse || loading) && (
+          <ResponseCards
+            standardResponse={standardResponse}
+            ragResponse={ragResponse}
+            retrievedContext={retrievedContext}
+            loading={loading}
+          />
+        )}
+      </main>
+    </div>
   );
 }
 
