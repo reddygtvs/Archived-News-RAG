@@ -26,7 +26,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
             value={query}
             onChange={onQueryChange}
             disabled={loading}
-            className="w-full px-4 py-5 pr-18 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:border-transparent"
+            className="w-full px-4 py-5 pr-20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:border-transparent"
             style={{
               backgroundColor: 'rgb(17, 17, 16)',
               border: '1px solid rgb(55, 55, 53)',

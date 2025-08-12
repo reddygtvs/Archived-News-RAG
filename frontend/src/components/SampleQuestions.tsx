@@ -10,7 +10,7 @@ interface SampleQuestionsProps {
 const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQuestionSelect }) => {
   return (
     <div className="mb-8" style={{ paddingTop: '8px' }}>
-      <div className="text-center mb-6">
+      <div className="text-center mb-10">
         <div className="inline-flex items-center px-6 py-3 rounded-full backdrop-blur-md border border-white/10" 
              style={{
                background: 'linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.9))',
@@ -28,7 +28,7 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQu
       </div>
       <div className="ticker-wrapper">
         <div className="ticker-content">
-          {[...sampleQuestions, ...sampleQuestions, ...sampleQuestions].map((q, index) => (
+          {[...sampleQuestions, ...sampleQuestions].map((q, index) => (
             <button
               key={`${q.id}-${index}`}
               onClick={() => onQuestionSelect(q.question)}
@@ -46,15 +46,26 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQu
             overflow: hidden;
             background: transparent;
             padding: 8px 0 16px 0;
-            margin-left: -100vw;
-            margin-right: -100vw;
-            width: calc(100vw + 200vw);
+            position: relative;
+            width: 100vw;
+            left: 50%;
+            transform: translateX(-50%);
           }
           
           .ticker-content {
             display: flex;
-            animation: scroll-left 60s linear infinite;
-            width: max-content;
+            animation: scroll-left 40s linear infinite;
+            width: 5200px;
+            will-change: transform;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+          }
+          
+          @media (max-width: 768px) {
+            .ticker-content {
+              animation-duration: 30s;
+            }
           }
           
           .ticker-item {
@@ -133,8 +144,8 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQu
           }
           
           @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-33.333%); }
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-2600px, 0, 0); }
           }
         `
       }} />
