@@ -106,7 +106,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{backgroundColor: '#0d0d0d'}}>
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-5 pt-3 pb-3">
@@ -162,16 +162,21 @@ function App() {
               
               .ticker-item {
                 flex-shrink: 0;
-                width: 280px;
+                width: 200px;
+                height: 140px;
                 margin-right: 16px;
-                padding: 16px;
+                padding: 12px;
                 background: rgb(25, 25, 24);
                 border: 1px solid rgb(55, 55, 53);
-                border-radius: 8px;
+                border-radius: 0;
                 color: rgb(238, 238, 236);
                 text-align: left;
                 cursor: pointer;
                 transition: all 0.2s ease;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                position: relative;
               }
               
               .ticker-item:hover {
@@ -181,9 +186,9 @@ function App() {
               }
               
               .ticker-category {
-                font-size: 12px;
+                font-size: 14px;
                 font-weight: 600;
-                margin-bottom: 8px;
+                margin-bottom: 6px;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 color: #39ff14;
@@ -191,7 +196,11 @@ function App() {
               
               .ticker-question {
                 font-size: 14px;
-                line-height: 1.4;
+                line-height: 1.3;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: calc(100% - 24px);
               }
               
               @keyframes scroll-left {
@@ -204,61 +213,67 @@ function App() {
 
         {/* Query Form */}
         <div className="mb-8">
-          <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
+            <form onSubmit={handleSubmit}>
+              <div className="flex gap-3">
                 <input
                   type="text"
                   placeholder="Enter your query about events/topics from 2015..."
                   value={query}
                   onChange={handleQueryChange}
                   disabled={loading}
-                  className="w-full px-4 py-3 bg-bg-primary border border-border-default rounded-md text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-spotify focus:border-transparent transition-all"
+                  className="flex-1 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all"
+                  style={{
+                    backgroundColor: 'rgb(17, 17, 16)',
+                    border: '1px solid rgb(55, 55, 53)'
+                  }}
                 />
+                <button
+                  type="submit"
+                  disabled={loading || !query.trim()}
+                  className="px-4 py-3 font-medium transition-all duration-200 hover-press"
+                  style={{
+                    backgroundColor: loading || !query.trim() ? 'rgb(39, 39, 37)' : '#39ff14',
+                    color: loading || !query.trim() ? 'rgb(156, 163, 175)' : '#000',
+                    border: 'none'
+                  }}
+                >
+                  {loading ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-transparent"></div>
+                    </div>
+                  ) : (
+                    "Ask"
+                  )}
+                </button>
               </div>
-              <button
-                type="submit"
-                disabled={loading || !query.trim()}
-                className="w-full px-6 py-3 bg-spotify hover:bg-spotify-hover disabled:bg-bg-tertiary disabled:text-text-secondary text-black font-medium rounded-md transition-all duration-200 hover-press"
-              >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-black border-t-transparent mr-2"></div>
-                    Processing...
-                  </div>
-                ) : (
-                  "Ask Question"
-                )}
-              </button>
             </form>
             {error && (
-              <div className="mt-4 p-4 bg-red-900/20 border border-red-500/30 rounded-md text-red-400">
+              <div className="mt-4 p-4 bg-red-900/20 border border-red-500/30 text-red-400">
                 {error}
               </div>
             )}
-          </div>
         </div>
 
         {/* Response Cards */}
         {(standardResponse || ragResponse || loading) && (
           <div className="grid md:grid-cols-2 gap-6">
             {/* Standard LLM Response */}
-            <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 text-glow-white">
+            <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px'}} className="p-6">
+              <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
                 Standard LLM Response
               </h2>
-              <div className="border-t border-border-default pt-4">
-                <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin">
+              <div className="border-t pt-4" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 60px)'}}>
+                <div style={{height: '100%'}} className="overflow-y-auto pr-2 scrollbar-thin">
                   {loading && !standardResponse ? (
                     <div className="flex items-center justify-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-spotify border-t-transparent"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-400 border-t-transparent"></div>
                     </div>
                   ) : standardResponse ? (
                     <div className="prose prose-invert max-w-none">
                       <ReactMarkdown>{standardResponse}</ReactMarkdown>
                     </div>
                   ) : (
-                    <p className="text-text-secondary">
+                    <p style={{color: 'rgb(181, 179, 173)'}}>
                       No response yet or an error occurred.
                     </p>
                   )}
@@ -267,25 +282,76 @@ function App() {
             </div>
 
             {/* RAG Response */}
-            <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 text-glow-white">
+            <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px'}} className="p-6">
+              <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
                 RAG Response
-                <span className="text-sm font-normal text-text-secondary ml-2">
+                <span className="text-sm font-normal ml-2" style={{color: 'rgb(181, 179, 173)'}}>
                   (with 2015 News Context)
                 </span>
               </h2>
-              <div className="border-t border-border-default pt-4">
-                <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin">
+              <div className="border-t pt-4" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 60px)'}}>
+                <div style={{height: '60%'}} className="overflow-y-auto pr-2 scrollbar-thin">
                   {loading && !ragResponse ? (
                     <div className="flex items-center justify-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-spotify border-t-transparent"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-400 border-t-transparent"></div>
                     </div>
                   ) : ragResponse ? (
                     <div className="prose prose-invert max-w-none">
-                      <ReactMarkdown>{ragResponse}</ReactMarkdown>
+                      <ReactMarkdown
+                        components={{
+                          p: ({ children }) => {
+                            // Convert reference numbers like [1] to clickable links
+                            const processText = (text: string) => {
+                              if (typeof text !== 'string') return text;
+                              
+                              // Handle multiple references like [8, 12, 16] and single references like [1]
+                              const parts = text.split(/(\[\d+(?:,\s*\d+)*\])/g);
+                              return parts.map((part, index) => {
+                                const match = part.match(/^\[(\d+(?:,\s*\d+)*)\]$/);
+                                if (match) {
+                                  return (
+                                    <button
+                                      key={index}
+                                      onClick={() => {
+                                        // Scroll to references section
+                                        const referencesSection = document.querySelector('details');
+                                        if (referencesSection) {
+                                          referencesSection.open = true;
+                                          referencesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                        }
+                                      }}
+                                      className="inline text-green-400 hover:text-green-300 transition-colors cursor-pointer"
+                                      style={{ fontSize: 'inherit', background: 'none', border: 'none', padding: 0 }}
+                                    >
+                                      {part}
+                                    </button>
+                                  );
+                                }
+                                return part;
+                              });
+                            };
+
+                            const processChildren = (children: any): any => {
+                              if (typeof children === 'string') {
+                                return processText(children);
+                              }
+                              if (Array.isArray(children)) {
+                                return children.map((child, index) => 
+                                  typeof child === 'string' ? processText(child) : child
+                                );
+                              }
+                              return children;
+                            };
+
+                            return <p>{processChildren(children)}</p>;
+                          }
+                        }}
+                      >
+                        {ragResponse}
+                      </ReactMarkdown>
                     </div>
                   ) : (
-                    <p className="text-text-secondary">
+                    <p style={{color: 'rgb(181, 179, 173)'}}>
                       No response yet or an error occurred.
                     </p>
                   )}
@@ -293,29 +359,31 @@ function App() {
                 
                 {/* Retrieved Context Section */}
                 {retrievedContext.length > 0 && (
-                  <div className="mt-6 border-t border-border-default pt-4">
-                    <details className="group">
-                      <summary className="cursor-pointer text-sm font-medium text-text-primary hover:text-white transition-colors mb-3 flex items-center">
+                  <div className="mt-4 border-t pt-4" style={{borderColor: 'rgb(55, 55, 53)', height: '35%'}}>
+                    <details className="group h-full">
+                      <summary className="cursor-pointer text-sm font-medium hover:text-white transition-colors mb-3 flex items-center" style={{color: 'rgb(238, 238, 236)'}}>
                         <svg className="w-4 h-4 mr-2 transition-transform group-open:rotate-90" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                         </svg>
                         References ({retrievedContext.length} source{retrievedContext.length !== 1 ? "s" : ""})
                       </summary>
-                      <div className="max-h-64 overflow-y-auto space-y-3 scrollbar-thin">
+                      <div style={{height: 'calc(100% - 50px)', maxHeight: '200px'}} className="overflow-y-auto space-y-3 scrollbar-thin">
                         {retrievedContext.map((item, index) => (
                           <div
                             key={item.article_id || index}
-                            className="bg-bg-primary border border-border-default rounded-md p-3"
+                            className="border p-3"
+                            style={{backgroundColor: 'rgb(17, 17, 16)', borderColor: 'rgb(55, 55, 53)'}}
                           >
                             <div className="text-sm font-medium text-white mb-2">
-                              <span className="text-spotify mr-2">[{index + 1}]</span>
+                              <span className="mr-2" style={{color: '#39ff14'}}>[{index + 1}]</span>
                               {item.title !== "Source Title Missing" && item.title ? (
                                 item.source !== "Source URL Missing" && item.source ? (
                                   <a
                                     href={item.source}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-text-primary hover:text-spotify transition-colors animated-underline"
+                                    className="hover:text-green-400 transition-colors animated-underline"
+                                    style={{color: 'rgb(238, 238, 236)'}}
                                   >
                                     {item.title}
                                   </a>
@@ -327,7 +395,8 @@ function App() {
                                   href={item.source}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-text-primary hover:text-spotify transition-colors animated-underline"
+                                  className="hover:text-green-400 transition-colors animated-underline"
+                                  style={{color: 'rgb(238, 238, 236)'}}
                                 >
                                   {item.source}
                                 </a>
@@ -336,16 +405,16 @@ function App() {
                               )}
                             </div>
                             <div className="flex flex-wrap gap-2 mb-2">
-                              <span className="inline-block px-2 py-1 bg-bg-tertiary text-xs text-text-secondary rounded">
+                              <span className="inline-block px-2 py-1 text-xs rounded" style={{backgroundColor: 'rgb(39, 39, 37)', color: 'rgb(181, 179, 173)'}}>
                                 Date: {formatDate(item.date)}
                               </span>
                               {typeof item.min_distance === "number" && (
-                                <span className="inline-block px-2 py-1 bg-bg-tertiary text-xs text-text-secondary rounded">
+                                <span className="inline-block px-2 py-1 text-xs rounded" style={{backgroundColor: 'rgb(39, 39, 37)', color: 'rgb(181, 179, 173)'}}>
                                   Score: {item.min_distance.toFixed(4)}
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-text-secondary max-h-16 overflow-y-auto">
+                            <p className="text-xs max-h-16 overflow-y-auto" style={{color: 'rgb(181, 179, 173)'}}>
                               {item.text}
                             </p>
                           </div>
