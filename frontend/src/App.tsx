@@ -70,10 +70,24 @@ function App() {
       <Header />
       
       <main className="pt-20 max-w-6xl mx-auto px-5 py-8">
-        <div className="text-center mb-8">
-          <p className="text-text-secondary text-lg mb-8">
-            Compare responses from standard LLM vs. RAG-enhanced model using The Guardian's 2015 Archive
+        <div className="text-center mb-16 py-8">
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{textShadow: '0 0 30px rgba(57, 255, 20, 0.4)'}}>
+            Compare AI Responses
+          </h1>
+          <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-4">
+            Experience the difference between standard LLM and RAG-enhanced responses using
           </p>
+          <span 
+            className="text-2xl font-bold text-green-400"
+            style={{
+              background: 'linear-gradient(90deg, #7dd3fc, #4ade80, #22c55e, #10b981, #34d399)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline-block'
+            }}
+          >
+            The Guardian's 2015 Archive
+          </span>
         </div>
 
         <SampleQuestions 

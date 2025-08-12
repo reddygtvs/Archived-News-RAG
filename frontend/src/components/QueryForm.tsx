@@ -19,35 +19,41 @@ const QueryForm: React.FC<QueryFormProps> = ({
   return (
     <div className="mb-8">
       <form onSubmit={onSubmit}>
-        <div className="flex gap-3">
+        <div className="relative">
           <input
             type="text"
             placeholder="Enter your query about events/topics from 2015..."
             value={query}
             onChange={onQueryChange}
             disabled={loading}
-            className="flex-1 px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all"
+            className="w-full px-4 py-5 pr-18 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:border-transparent"
             style={{
               backgroundColor: 'rgb(17, 17, 16)',
-              border: '1px solid rgb(55, 55, 53)'
+              border: '1px solid rgb(55, 55, 53)',
+              borderRadius: '8px'
             }}
           />
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="px-4 py-3 font-medium transition-all duration-200 hover-press"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center transition-all duration-200"
             style={{
-              backgroundColor: loading || !query.trim() ? 'rgb(39, 39, 37)' : '#39ff14',
+              background: loading || !query.trim() 
+                ? 'linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.9))' 
+                : 'linear-gradient(135deg, #39ff14, #22c55e)',
               color: loading || !query.trim() ? 'rgb(156, 163, 175)' : '#000',
-              border: 'none'
+              border: loading || !query.trim() ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
+              borderRadius: '8px',
+              boxShadow: loading || !query.trim() 
+                ? '0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
+                : '0 4px 12px rgba(57, 255, 20, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)',
+              backdropFilter: 'blur(10px)'
             }}
           >
             {loading ? (
-              <div className="flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-400 border-t-transparent"></div>
-              </div>
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-gray-400 border-t-transparent"></div>
             ) : (
-              "Ask"
+              <span style={{ fontSize: '24px', fontWeight: 'bold' }}>▶</span>
             )}
           </button>
         </div>

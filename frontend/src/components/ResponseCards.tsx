@@ -20,7 +20,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {/* Standard LLM Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px'}} className="p-6">
+      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px', borderRadius: '8px'}} className="p-6">
         <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
           Standard LLM Response
         </h2>
@@ -44,15 +44,15 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
       </div>
 
       {/* RAG Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px'}} className="p-6">
+      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px', borderRadius: '8px'}} className="p-4">
         <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
           RAG Response
           <span className="text-sm font-normal ml-2" style={{color: 'rgb(181, 179, 173)'}}>
             (with 2015 News Context)
           </span>
         </h2>
-        <div className="border-t pt-4" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 60px)'}}>
-          <div style={{height: '60%'}} className="overflow-y-auto pr-2 scrollbar-thin">
+        <div className="border-t pt-4 flex flex-col" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 50px)'}}>
+          <div style={{flex: '1'}} className="overflow-y-auto pr-2 scrollbar-thin">
             {loading && !ragResponse ? (
               <div className="flex items-center justify-center h-32">
                 <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-400 border-t-transparent"></div>
