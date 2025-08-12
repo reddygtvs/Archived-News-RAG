@@ -47,10 +47,16 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
               }}
             >
               <div className="text-xs font-medium text-white mb-2">
-                <span className="mr-2 text-xs px-1.5 py-0.5 rounded" style={{
+                <span className="mr-2 text-xs px-1 py-0.5 rounded" style={{
                   background: 'linear-gradient(90deg, #39ff14, #22c55e)',
                   color: '#000',
-                  fontWeight: '600'
+                  fontWeight: '600',
+                  lineHeight: '1',
+                  display: 'inline-block',
+                  textAlign: 'center',
+                  minWidth: '1.2em',
+                  paddingTop: '0.1rem',
+                  paddingBottom: '0.2rem'
                 }}>[{index + 1}]</span>
                 {item.title !== "Source Title Missing" && item.title ? (
                   item.source !== "Source URL Missing" && item.source ? (
@@ -102,7 +108,7 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
                   </span>
                 )}
               </div>
-              <p className="text-xs max-h-12 overflow-y-auto leading-relaxed" style={{
+              <p className="text-xs leading-relaxed truncate" style={{
                 color: 'rgb(190, 190, 190)',
                 fontSize: '11px',
                 lineHeight: '1.4'

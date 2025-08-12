@@ -18,8 +18,8 @@ const QueryForm: React.FC<QueryFormProps> = ({
 }) => {
   return (
     <div className="mb-8">
-      <form onSubmit={onSubmit}>
-        <div className="relative">
+      <form onSubmit={onSubmit} className="flex justify-center">
+        <div className="relative w-full max-w-2xl">
           <input
             type="text"
             placeholder="Enter your query about events/topics from 2015..."
@@ -36,7 +36,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center transition-all duration-200"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 w-12 h-12 flex items-center justify-center transition-all duration-200 hover:scale-105"
             style={{
               background: loading || !query.trim() 
                 ? 'linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.9))' 
