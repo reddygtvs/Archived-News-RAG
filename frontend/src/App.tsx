@@ -2,30 +2,9 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
-import {
-  CssBaseline,
-  Container,
-  TextField,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  CircularProgress,
-  Box,
-  Link,
-  Paper,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Divider,
-  Alert,
-  Chip,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import "./App.css";
+import "./index.css";
 
-const API_URL = "http://localhost:5001/api/query"; // Match Flask port
+const API_URL = "http://localhost:5001/api/query";
 
 interface RetrievedContextItem {
   text: string;
@@ -42,6 +21,26 @@ interface ApiResponse {
   retrieved_chunks: RetrievedContextItem[];
   error?: string;
 }
+
+interface SampleQuestion {
+  id: string;
+  question: string;
+  category: string;
+}
+
+const sampleQuestions: SampleQuestion[] = [
+  { id: "1", question: "What were the major political events in 2015?", category: "Politics" },
+  { id: "2", question: "Tell me about climate change discussions in 2015", category: "Environment" },
+  { id: "3", question: "What sports events happened in 2015?", category: "Sports" },
+  { id: "4", question: "What were the biggest tech innovations in 2015?", category: "Technology" },
+  { id: "5", question: "What economic events shaped 2015?", category: "Economics" },
+  { id: "6", question: "What cultural movements emerged in 2015?", category: "Culture" },
+  { id: "7", question: "What international conflicts occurred in 2015?", category: "World" },
+  { id: "8", question: "What scientific breakthroughs happened in 2015?", category: "Science" },
+  { id: "9", question: "What social issues dominated 2015?", category: "Society" },
+  { id: "10", question: "What entertainment news defined 2015?", category: "Entertainment" }
+];
+
 
 function App() {
   const [query, setQuery] = useState<string>("");
@@ -107,288 +106,260 @@ function App() {
   };
 
   return (
-    <>
-      <CssBaseline />
-      <Container
-        maxWidth="xl"
-        sx={{ paddingY: "2rem", paddingX: { xs: "1rem", md: "2rem" } }}
-      >
-        <Typography variant="h4" gutterBottom align="center" component="h1">
-          Archived News RAG vs. Standard LLM
-        </Typography>
-        {/* Style hack */}
-        <Typography
-          variant="subtitle1"
-          gutterBottom
-          align="center"
-          color="textSecondary"
-          sx={{ mb: 3 }}
-        >
-          Querying events from The Guardian's 2015 Archive
-        </Typography>
+    <div className="min-h-screen bg-black">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-5 pt-3 pb-3">
+          <h1 
+            className="text-xl md:text-2xl font-bold text-white uppercase tracking-widest m-0 text-glow-white cursor-pointer hover:text-spotify transition-colors duration-200"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            ARCHIVED NEWS RAG<span className="bounce-favicon">.</span>
+          </h1>
+        </div>
+      </header>
 
-        <Paper
-          elevation={3}
-          sx={{
-            padding: "1.5rem",
-            marginBottom: "2.5rem",
-            borderRadius: "8px",
-          }}
-        >
-          <form onSubmit={handleSubmit}>
-            <TextField
-              fullWidth
-              label="Enter your query about events/topics from 2015"
-              variant="outlined"
-              value={query}
-              onChange={handleQueryChange}
-              disabled={loading}
-              margin="normal"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={loading}
-              size="large"
-              sx={{ marginTop: "1rem", display: "block", mx: "auto" }}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : "Ask"}
-            </Button>
-          </form>
-          {error && (
-            <Alert severity="error" sx={{ marginTop: "1.5rem" }}>
-              {error}
-            </Alert>
-          )}
-        </Paper>
+      {/* Main Content */}
+      <main className="pt-20 max-w-6xl mx-auto px-5 py-8">
+        <div className="text-center mb-8">
+          <p className="text-text-secondary text-lg mb-8">
+            Compare responses from standard LLM vs. RAG-enhanced model using The Guardian's 2015 Archive
+          </p>
+        </div>
 
-        <Grid container spacing={4}>
-          {/* Standard LLM Response */}
-          <Grid item xs={12} md={6}>
-            <Card
-              variant="outlined"
-              sx={{ height: "100%", borderRadius: "8px" }}
-            >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
-                <Typography variant="h6" gutterBottom component="h2">
-                  Standard LLM Response
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    overflowY: "auto",
-                    maxHeight: "60vh",
-                    pr: 1,
-                    wordBreak: "break-word",
-                  }}
+        {/* Sample Questions Carousel */}
+        <div className="mb-8" style={{ paddingTop: '8px' }}>
+          <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
+            Sample Questions
+          </h2>
+          <div className="ticker-wrapper">
+            <div className="ticker-content">
+              {[...sampleQuestions, ...sampleQuestions, ...sampleQuestions].map((q, index) => (
+                <button
+                  key={`${q.id}-${index}`}
+                  onClick={() => setQuery(q.question)}
+                  className="ticker-item"
                 >
-                  {" "}
-                  {/* Added wordBreak to make things more manageable on the view */}
+                  <div className="ticker-category">{q.category}</div>
+                  <div className="ticker-question">{q.question}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              .ticker-wrapper {
+                overflow: hidden;
+                background: transparent;
+                padding: 8px 0 16px 0;
+              }
+              
+              .ticker-content {
+                display: flex;
+                animation: scroll-left 60s linear infinite;
+                width: max-content;
+              }
+              
+              .ticker-item {
+                flex-shrink: 0;
+                width: 280px;
+                margin-right: 16px;
+                padding: 16px;
+                background: rgb(25, 25, 24);
+                border: 1px solid rgb(55, 55, 53);
+                border-radius: 8px;
+                color: rgb(238, 238, 236);
+                text-align: left;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              }
+              
+              .ticker-item:hover {
+                background: rgb(39, 39, 37);
+                border-color: rgb(75, 75, 73);
+                transform: translateY(-2px);
+              }
+              
+              .ticker-category {
+                font-size: 12px;
+                font-weight: 600;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                color: #39ff14;
+              }
+              
+              .ticker-question {
+                font-size: 14px;
+                line-height: 1.4;
+              }
+              
+              @keyframes scroll-left {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-33.333%); }
+              }
+            `
+          }} />
+        </div>
+
+        {/* Query Form */}
+        <div className="mb-8">
+          <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Enter your query about events/topics from 2015..."
+                  value={query}
+                  onChange={handleQueryChange}
+                  disabled={loading}
+                  className="w-full px-4 py-3 bg-bg-primary border border-border-default rounded-md text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-spotify focus:border-transparent transition-all"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading || !query.trim()}
+                className="w-full px-6 py-3 bg-spotify hover:bg-spotify-hover disabled:bg-bg-tertiary disabled:text-text-secondary text-black font-medium rounded-md transition-all duration-200 hover-press"
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-black border-t-transparent mr-2"></div>
+                    Processing...
+                  </div>
+                ) : (
+                  "Ask Question"
+                )}
+              </button>
+            </form>
+            {error && (
+              <div className="mt-4 p-4 bg-red-900/20 border border-red-500/30 rounded-md text-red-400">
+                {error}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Response Cards */}
+        {(standardResponse || ragResponse || loading) && (
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Standard LLM Response */}
+            <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-white mb-4 text-glow-white">
+                Standard LLM Response
+              </h2>
+              <div className="border-t border-border-default pt-4">
+                <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin">
                   {loading && !standardResponse ? (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      height="100%"
-                    >
-                      <CircularProgress />
-                    </Box>
+                    <div className="flex items-center justify-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-spotify border-t-transparent"></div>
+                    </div>
                   ) : standardResponse ? (
-                    // --- USE REACT-MARKDOWN ---
-                    <ReactMarkdown
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <Typography variant="body1" paragraph {...props} />
-                        ),
-                        h1: ({ node, ...props }) => (
-                          <Typography variant="h4" {...props} />
-                        ),
-                      }}
-                    >
-                      {standardResponse}
-                    </ReactMarkdown>
+                    <div className="prose prose-invert max-w-none">
+                      <ReactMarkdown>{standardResponse}</ReactMarkdown>
+                    </div>
                   ) : (
-                    <Typography variant="body2" color="textSecondary">
+                    <p className="text-text-secondary">
                       No response yet or an error occurred.
-                    </Typography>
+                    </p>
                   )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+                </div>
+              </div>
+            </div>
 
-          {/* RAG Response */}
-          <Grid item xs={12} md={6}>
-            <Card
-              variant="outlined"
-              sx={{ height: "100%", borderRadius: "8px" }}
-            >
-              <CardContent
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
-              >
-                <Typography variant="h6" gutterBottom component="h2">
-                  RAG Response (with 2015 News Context)
-                </Typography>
-                <Divider sx={{ mb: 2 }} />
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    overflowY: "auto",
-                    maxHeight: "60vh",
-                    pr: 1,
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {" "}
-                  {/* Added wordBreak */}
+            {/* RAG Response */}
+            <div className="bg-bg-secondary border border-border-default rounded-lg p-6">
+              <h2 className="text-lg font-semibold text-white mb-4 text-glow-white">
+                RAG Response
+                <span className="text-sm font-normal text-text-secondary ml-2">
+                  (with 2015 News Context)
+                </span>
+              </h2>
+              <div className="border-t border-border-default pt-4">
+                <div className="max-h-96 overflow-y-auto pr-2 scrollbar-thin">
                   {loading && !ragResponse ? (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      height="100%"
-                    >
-                      <CircularProgress />
-                    </Box>
+                    <div className="flex items-center justify-center h-32">
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-spotify border-t-transparent"></div>
+                    </div>
                   ) : ragResponse ? (
-                    <ReactMarkdown
-                      components={{
-                        p: ({ node, ...props }) => (
-                          <Typography variant="body1" paragraph {...props} />
-                        ),
-                      }}
-                    >
-                      {ragResponse}
-                    </ReactMarkdown>
+                    <div className="prose prose-invert max-w-none">
+                      <ReactMarkdown>{ragResponse}</ReactMarkdown>
+                    </div>
                   ) : (
-                    <Typography variant="body2" color="textSecondary">
+                    <p className="text-text-secondary">
                       No response yet or an error occurred.
-                    </Typography>
+                    </p>
                   )}
-                  {/* Retrieved Context Section */}
-                  {retrievedContext.length > 0 && (
-                    <Accordion
-                      sx={{
-                        marginTop: "1.5rem",
-                        border: "1px solid #e0e0e0",
-                        boxShadow: "none",
-                        borderRadius: "4px",
-                      }}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="retrieved-context-panel-content"
-                        id="retrieved-context-panel-header"
-                      >
-                        <Typography variant="subtitle1">
-                          Retrieved Context ({retrievedContext.length} article
-                          {retrievedContext.length !== 1 ? "s" : ""})
-                        </Typography>
-                      </AccordionSummary>
-                      <AccordionDetails
-                        sx={{
-                          maxHeight: "300px",
-                          overflowY: "auto",
-                          display: "block",
-                          backgroundColor: "#f9f9fa",
-                          p: 1.5,
-                        }}
-                      >
+                </div>
+                
+                {/* Retrieved Context Section */}
+                {retrievedContext.length > 0 && (
+                  <div className="mt-6 border-t border-border-default pt-4">
+                    <details className="group">
+                      <summary className="cursor-pointer text-sm font-medium text-text-primary hover:text-white transition-colors mb-3 flex items-center">
+                        <svg className="w-4 h-4 mr-2 transition-transform group-open:rotate-90" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                        </svg>
+                        References ({retrievedContext.length} source{retrievedContext.length !== 1 ? "s" : ""})
+                      </summary>
+                      <div className="max-h-64 overflow-y-auto space-y-3 scrollbar-thin">
                         {retrievedContext.map((item, index) => (
-                          <Paper
+                          <div
                             key={item.article_id || index}
-                            variant="outlined"
-                            sx={{
-                              padding: "1rem",
-                              marginBottom: "1rem",
-                              backgroundColor: "#fff",
-                              borderRadius: "4px",
-                            }}
+                            className="bg-bg-primary border border-border-default rounded-md p-3"
                           >
-                            <Typography
-                              variant="subtitle2"
-                              component="h3"
-                              gutterBottom
-                            >
-                              {item.title !== "Source Title Missing" &&
-                              item.title ? (
-                                item.source !== "Source URL Missing" &&
-                                item.source ? (
-                                  <Link
+                            <div className="text-sm font-medium text-white mb-2">
+                              <span className="text-spotify mr-2">[{index + 1}]</span>
+                              {item.title !== "Source Title Missing" && item.title ? (
+                                item.source !== "Source URL Missing" && item.source ? (
+                                  <a
                                     href={item.source}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    underline="hover"
+                                    className="text-text-primary hover:text-spotify transition-colors animated-underline"
                                   >
                                     {item.title}
-                                  </Link>
+                                  </a>
                                 ) : (
                                   item.title
                                 )
-                              ) : item.source !== "Source URL Missing" &&
-                                item.source ? (
-                                <Link
+                              ) : item.source !== "Source URL Missing" && item.source ? (
+                                <a
                                   href={item.source}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  underline="hover"
+                                  className="text-text-primary hover:text-spotify transition-colors animated-underline"
                                 >
                                   {item.source}
-                                </Link>
+                                </a>
                               ) : (
-                                "Retrieved Article " + (index + 1)
+                                `Retrieved Article ${index + 1}`
                               )}
-                            </Typography>
-                            <Chip
-                              label={`Date: ${formatDate(item.date)}`}
-                              size="small"
-                              sx={{ mb: 1, mr: 1 }}
-                            />
-                            {typeof item.min_distance === "number" && (
-                              <Chip
-                                label={`Relevance Score (Dist): ${item.min_distance.toFixed(
-                                  4
-                                )}`}
-                                size="small"
-                                variant="outlined"
-                                sx={{ mb: 1 }}
-                              />
-                            )}
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                mt: 1,
-                                maxHeight: "100px",
-                                overflowY: "auto",
-                                color: "text.secondary",
-                              }}
-                            >
+                            </div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              <span className="inline-block px-2 py-1 bg-bg-tertiary text-xs text-text-secondary rounded">
+                                Date: {formatDate(item.date)}
+                              </span>
+                              {typeof item.min_distance === "number" && (
+                                <span className="inline-block px-2 py-1 bg-bg-tertiary text-xs text-text-secondary rounded">
+                                  Score: {item.min_distance.toFixed(4)}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-text-secondary max-h-16 overflow-y-auto">
                               {item.text}
-                            </Typography>
-                          </Paper>
+                            </p>
+                          </div>
                         ))}
-                      </AccordionDetails>
-                    </Accordion>
-                  )}
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
-    </>
+                      </div>
+                    </details>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
   );
 }
 
