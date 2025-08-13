@@ -11,7 +11,7 @@ log = logging.getLogger('werkzeug') # Get Flask's default logger
 log.setLevel(logging.INFO)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://localhost:5174"]}}) # Support both ports
+CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]}}) # Support multiple ports
 
 # --- Initialize RAG System ---
 try:
@@ -45,17 +45,12 @@ def handle_query():
     logging.info(f"Received query from app: '{query[:200]}...'") # Distinguish from evaluate.py logs
 
     try:
-        # 1. Get Standard LLM Response
-        logging.info("App: Generating standard response...")
-        # generate_standard_response now returns (response_text, llm_duration)
-        standard_response_text, _ = rag_system.generate_standard_response(query) # Ignore duration for app
+        # Generate both responses in a single LLM call for better performance
+        logging.info("App: Generating combined responses...")
+        # generate_combined_responses returns (standard_text, rag_text, context_info, retrieval_duration, llm_duration, context_length)
+        standard_response_text, rag_response_text, retrieved_context_info, _, _, _ = rag_system.generate_combined_responses(query)
 
-        # 2. Get RAG LLM Response
-        logging.info("App: Generating RAG response...")
-        # generate_rag_response returns (response_text, context_info, retrieval_duration, llm_duration, context_length)
-        rag_response_text, retrieved_context_info, _, _, _ = rag_system.generate_rag_response(query)
-
-        # 3. Prepare JSON response
+        # Prepare JSON response
         logging.info(f"App: Sending responses to frontend. RAG context items: {len(retrieved_context_info)}")
         return jsonify({
             "standard_response": standard_response_text,

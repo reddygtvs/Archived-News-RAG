@@ -9,7 +9,7 @@ import SampleQuestions from "./components/SampleQuestions";
 import QueryForm from "./components/QueryForm";
 import ResponseCards from "./components/ResponseCards";
 
-const API_URL = "http://localhost:5001/api/query";
+const API_URL = "http://localhost:5002/api/query";
 
 
 function App() {

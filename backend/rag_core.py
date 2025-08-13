@@ -20,10 +20,10 @@ logger = logging.getLogger(__name__)
 ARTICLE_LOOKUP_PATH = "data/article_lookup.pkl"
 
 # --- Constants ---
-NUM_FULL_ARTICLES_TO_USE = 20 # Number of full articles to provide as context
-RETRIEVE_MULTIPLIER = 3 # Retrieve initial_k = NUM_FULL_ARTICLES_TO_USE * RETRIEVE_MULTIPLIER chunks
+NUM_FULL_ARTICLES_TO_USE = 7 # Number of full articles to provide as context
+RETRIEVE_MULTIPLIER = 2 # Retrieve initial_k = NUM_FULL_ARTICLES_TO_USE * RETRIEVE_MULTIPLIER chunks
 EVALUATOR_LLM_MODEL_NAME = "gemini-1.5-pro-latest" # LLM for evaluation
-MAX_ARTICLE_TEXT_LEN = 150000 # Character limit per article in RAG prompt context
+MAX_ARTICLE_TEXT_LEN = 50000 # Character limit per article in RAG prompt context
 # Defining safety settings to disable potential blocking
 SAFETY_SETTINGS_OFF = [{"category": c, "threshold": "BLOCK_NONE"} for c in [
     "HARM_CATEGORY_HARASSMENT", "HARM_CATEGORY_HATE_SPEECH",
@@ -402,6 +402,103 @@ Answer:"""
         # Use the helper function to make the call
         response_text, llm_call_duration = self._call_llm(self.generator_llm, query, "Standard Generator")
         return response_text, llm_call_duration
+
+    def generate_combined_responses(self, query: str) -> tuple[str, str, list[dict], float, float, int]:
+        """Generates both standard and RAG responses in a single LLM call for better performance."""
+        logger.info(f"--- Generating Combined Responses using {GEMINI_MODEL_NAME} for Query: '{query[:100]}...' ---")
+        
+        # Step 1: Retrieve relevant articles and retrieval duration
+        retrieved_articles, retrieval_duration = self.retrieve_relevant_articles(query)
+        
+        # Step 2: Prepare simplified context for returning (to frontend/evaluator script)
+        simplified_context_for_frontend = [
+             { "text": article.get("full_text", "")[:500] + "...", # Truncate for summary
+               "source": article.get("url", "Source URL Missing"),
+               "title": article.get("title", "Source Title Missing"),
+               "date": article.get("date", "N/A"),
+               "article_id": article.get("id"),
+               "min_distance": article.get("min_distance")
+             } for article in retrieved_articles
+        ]
+        
+        # Handle case where no articles are retrieved
+        if not retrieved_articles:
+            logger.warning("No relevant articles found for RAG, falling back to standard response generation.")
+            std_response_text, llm_duration = self.generate_standard_response(query)
+            return std_response_text, f"(No relevant 2015 articles found to augment response.)\n\n{std_response_text}", [], retrieval_duration, llm_duration, 0
+        
+        # Step 3: Construct the prompt context from full article texts
+        context_items = []
+        total_context_chars = 0
+        for i, article in enumerate(retrieved_articles):
+             article_url = article.get('url', 'URL_NOT_FOUND')
+             article_date = article.get('date', 'DATE_NOT_FOUND')
+             source_info = f"[ARTICLE {i+1} START | URL: {article_url} | DATE: {article_date}]"
+             end_info = f"[ARTICLE {i+1} END]"
+             article_text = article.get('full_text', '')
+             if len(article_text) > MAX_ARTICLE_TEXT_LEN:
+                 logger.warning(f"Truncating article {article.get('id')} from {len(article_text)} to {MAX_ARTICLE_TEXT_LEN} chars for LLM context.")
+                 article_text = article_text[:MAX_ARTICLE_TEXT_LEN] + "..."
+             full_item = f"{source_info}\n{article_text}\n{end_info}"
+             context_items.append(full_item)
+             total_context_chars += len(full_item)
+        context_str = "\n\n---\n\n".join(context_items)
+        
+        # Step 4: Define the combined prompt for both responses
+        prompt = f"""Generate TWO comprehensive responses to the following question:
+
+RESPONSE 1 - STANDARD: 
+- Provide a detailed, comprehensive answer using only your general knowledge
+- Include specific examples, dates, and key details where relevant
+- Structure your response with clear explanations and context
+- Aim for thorough coverage of the topic
+
+RESPONSE 2 - RAG: 
+- Analyze the provided 2015 Guardian articles context below
+- Cite sources using numbered references [1], [2], [3] corresponding to article numbers
+- Synthesize information across articles when relevant  
+- Extract specific details, names, dates, and arguments from the articles
+- Provide comprehensive coverage using the article context
+
+Context:
+---
+{context_str}
+---
+
+Question: {query}
+
+Format your response as:
+STANDARD_RESPONSE:
+[comprehensive standard answer here]
+
+RAG_RESPONSE:
+[comprehensive context-based answer here with citations]"""
+
+        # Step 5: Call the Generator LLM using the helper function
+        combined_response, llm_call_duration = self._call_llm(self.generator_llm, prompt, "Combined Generator")
+        
+        # Step 6: Parse the combined response into standard and RAG parts
+        standard_response = ""
+        rag_response = ""
+        
+        try:
+            if "STANDARD_RESPONSE:" in combined_response and "RAG_RESPONSE:" in combined_response:
+                parts = combined_response.split("RAG_RESPONSE:")
+                standard_part = parts[0].replace("STANDARD_RESPONSE:", "").strip()
+                rag_part = parts[1].strip()
+                standard_response = standard_part
+                rag_response = rag_part
+            else:
+                # Fallback if parsing fails
+                logger.warning("Failed to parse combined response, using fallback")
+                standard_response = "Error parsing standard response from combined output."
+                rag_response = combined_response
+        except Exception as e:
+            logger.error(f"Error parsing combined response: {e}")
+            standard_response = "Error parsing standard response."
+            rag_response = combined_response
+        
+        return standard_response, rag_response, simplified_context_for_frontend, retrieval_duration, llm_call_duration, total_context_chars
 
     def evaluate_responses_with_llm(self, query: str, standard_response: str, rag_response: str) -> tuple[dict | None, float]:
         """Uses Evaluator LLM (Gemini Pro 1.5) to evaluate and compare responses."""

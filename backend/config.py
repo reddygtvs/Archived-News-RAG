@@ -26,8 +26,8 @@ RETRIEVAL_K = 5 # Number of chunks to retrieve
 
 # --- LLM ---
 GEMINI_API_KEY = os.getenv("GOOGLE_API_KEY")
-GEMINI_MODEL_NAME = "gemini-1.5-flash" # Using flash as the base model
+GEMINI_MODEL_NAME = "gemini-2.5-flash" # Using 2.5 flash for better performance
 
 # --- API ---
 API_HOST = "127.0.0.1"
-API_PORT = 5001 # Port for the backend API server
+API_PORT = 5002 # Port for the backend API server
