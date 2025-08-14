@@ -46,3 +46,8 @@ backend/data_backup/
 
 # Optimization and benchmark files
 backend/GEMINI_2.5_FLASH_OPTIMIZATION.md
+
+# Generated hardcoded responses (for dark deception mode)
+backend/generate_hardcoded_responses.py
+backend/hardcoded_responses.json
+backend/response_generation.log

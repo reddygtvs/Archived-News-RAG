@@ -22,11 +22,12 @@ const QueryForm: React.FC<QueryFormProps> = ({
         <div className="relative w-full max-w-2xl">
           <input
             type="text"
-            placeholder="Enter your query about events/topics from 2015..."
+            placeholder="Pick one of the cached responses from above"
             value={query}
             onChange={onQueryChange}
-            disabled={loading}
-            className="w-full px-4 py-5 pr-20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-600/50 focus:border-transparent"
+            disabled={true}
+            readOnly={true}
+            className="w-full px-4 py-5 pr-20 text-white placeholder-gray-400 focus:outline-none cursor-not-allowed disabled:bg-gray-900"
             style={{
               backgroundColor: 'rgb(17, 17, 16)',
               border: '1px solid rgb(55, 55, 53)',
