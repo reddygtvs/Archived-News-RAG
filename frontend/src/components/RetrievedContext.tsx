@@ -117,7 +117,7 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
                     </div>
                   </div>
                   
-                  <p className="text-premium-xs text-white/70 leading-relaxed line-clamp-3 pl-9">
+                  <p className="text-premium-xs text-white/70 leading-relaxed line-clamp-1 pl-9">
                     {item.text}
                   </p>
                 </div>
