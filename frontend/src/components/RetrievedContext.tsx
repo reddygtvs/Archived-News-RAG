@@ -1,14 +1,14 @@
 // frontend/src/components/RetrievedContext.tsx
-import React from "react";
+import React, { useState } from "react";
 import { RetrievedContextItem } from "../types";
 
 interface RetrievedContextProps {
   retrievedContext: RetrievedContextItem[];
 }
 
-const RetrievedContext: React.FC<RetrievedContextProps> = ({
-  retrievedContext,
-}) => {
+const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
   const formatDate = (dateString: string | undefined | null) => {
     if (!dateString) return "N/A";
     try {
@@ -27,151 +27,96 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({
   }
 
   return (
-    <div
-      className="mt-4 border-t pt-4"
-      style={{ borderColor: "rgb(55, 55, 53)", height: "35%" }}
-    >
-      <details className="group h-full">
-        <summary
-          className="cursor-pointer text-sm font-medium hover:text-white transition-colors mb-3 flex items-center"
-          style={{ color: "rgb(238, 238, 236)" }}
+    <div className="border-t border-white/10 pt-6 relative">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer hover:text-green-400 transition-all duration-200 mb-0 flex items-center text-premium-sm font-medium text-white/90 w-full text-left"
+      >
+        <svg 
+          className={`w-4 h-4 mr-3 transition-transform duration-200 text-green-400 ${isOpen ? 'rotate-90' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          strokeWidth="2"
         >
-          <svg
-            className="w-4 h-4 mr-2 transition-transform group-open:rotate-90"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path
-              fillRule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-          References ({retrievedContext.length} source
-          {retrievedContext.length !== 1 ? "s" : ""})
-        </summary>
-        <div
-          style={{ height: "calc(100% - 50px)", maxHeight: "200px" }}
-          className="overflow-y-auto space-y-2 scrollbar-thin"
-        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span className="flex items-center space-x-2">
+          <span>Source References</span>
+          <div className="glass px-2 py-1 rounded-full">
+            <span className="text-xs font-semibold text-green-400">
+              {retrievedContext.length}
+            </span>
+          </div>
+        </span>
+      </button>
+      
+      {isOpen && (
+        <div className="absolute top-full left-0 right-0 z-50 mt-4 max-h-64 overflow-y-auto space-y-3 scrollbar-premium glass-strong rounded-lg p-4 shadow-premium-lg">
           {retrievedContext.map((item, index) => (
             <div
               key={item.article_id || index}
-              className="border p-3 transition-all duration-150"
-              style={{
-                background:
-                  "linear-gradient(135deg, rgba(25, 25, 25, 0.9), rgba(20, 20, 20, 0.95))",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                borderRadius: "6px",
-                boxShadow:
-                  "0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05)",
-                backdropFilter: "blur(8px)",
-              }}
+              className="glass rounded-lg p-4"
             >
-              <div className="text-xs font-medium text-white mb-2">
-                <span
-                  className="mr-2 text-xs px-1 py-0.5 rounded"
-                  style={{
-                    background: "linear-gradient(90deg, #39ff14, #22c55e)",
-                    color: "#000",
-                    fontWeight: "600",
-                    lineHeight: "1",
-                    display: "inline-block",
-                    textAlign: "center",
-                    minWidth: "1.2em",
-                    paddingTop: "0.1rem",
-                    paddingBottom: "0.2rem",
-                  }}
-                >
-                  [{index + 1}]
-                </span>
-                {item.title !== "Source Title Missing" && item.title ? (
-                  item.source !== "Source URL Missing" && item.source ? (
-                    <a
-                      href={item.source}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-green-400 transition-colors"
-                      style={{
-                        color: "rgb(238, 238, 236)",
-                        textDecoration: "none",
-                      }}
-                      onMouseEnter={(e) =>
-                        ((e.target as HTMLElement).style.textDecoration =
-                          "underline")
-                      }
-                      onMouseLeave={(e) =>
-                        ((e.target as HTMLElement).style.textDecoration =
-                          "none")
-                      }
-                    >
-                      {item.title}
-                    </a>
-                  ) : (
-                    item.title
-                  )
-                ) : item.source !== "Source URL Missing" && item.source ? (
-                  <a
-                    href={item.source}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-green-400 transition-colors"
-                    style={{
-                      color: "rgb(238, 238, 236)",
-                      textDecoration: "none",
-                    }}
-                    onMouseEnter={(e) =>
-                      ((e.target as HTMLElement).style.textDecoration =
-                        "underline")
-                    }
-                    onMouseLeave={(e) =>
-                      ((e.target as HTMLElement).style.textDecoration = "none")
-                    }
-                  >
-                    {item.source}
-                  </a>
-                ) : (
-                  `Retrieved Article ${index + 1}`
-                )}
-              </div>
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                <span
-                  className="inline-block px-2 py-0.5 text-xs rounded"
-                  style={{
-                    background: "rgba(255, 255, 255, 0.05)",
-                    color: "rgb(200, 200, 200)",
-                    fontSize: "10px",
-                  }}
-                >
-                  {formatDate(item.date)}
-                </span>
-                {typeof item.min_distance === "number" && (
-                  <span
-                    className="inline-block px-2 py-0.5 text-xs rounded"
-                    style={{
-                      background: "rgba(57, 255, 20, 0.1)",
-                      color: "#39ff14",
-                      fontSize: "10px",
-                    }}
-                  >
-                    {item.min_distance.toFixed(3)}
+              <div className="flex items-start space-x-3 mb-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded bg-green-400 flex items-center justify-center">
+                  <span className="text-xs font-bold text-black">
+                    {index + 1}
                   </span>
-                )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-premium-sm font-medium text-white truncate mb-1">
+                    {item.title !== "Source Title Missing" && item.title ? (
+                      item.source !== "Source URL Missing" && item.source ? (
+                        <a
+                          href={item.source}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-green-400 transition-colors"
+                        >
+                          {item.title}
+                        </a>
+                      ) : (
+                        item.title
+                      )
+                    ) : item.source !== "Source URL Missing" && item.source ? (
+                      <a
+                        href={item.source}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-green-400 transition-colors"
+                      >
+                        {item.source}
+                      </a>
+                    ) : (
+                      `Retrieved Article ${index + 1}`
+                    )}
+                  </h4>
+                  
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <div className="glass px-2 py-1 rounded">
+                      <span className="text-xs text-white/70">
+                        {formatDate(item.date)}
+                      </span>
+                    </div>
+                    {typeof item.min_distance === "number" && (
+                      <div className="glass px-2 py-1 rounded border-green-400/20">
+                        <span className="text-xs text-green-400 font-medium">
+                          Similarity: {(1 - item.min_distance).toFixed(3)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <p
-                className="text-xs leading-relaxed truncate"
-                style={{
-                  color: "rgb(190, 190, 190)",
-                  fontSize: "11px",
-                  lineHeight: "1.4",
-                }}
-              >
+              
+              <p className="text-premium-sm text-white/70 leading-relaxed line-clamp-2">
                 {item.text}
               </p>
             </div>
           ))}
         </div>
-      </details>
+      )}
     </div>
   );
 };
