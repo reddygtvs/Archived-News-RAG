@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: /sitemap.xml
+
+# Allow all crawlers to access the site
+# This RAG application is designed to be publicly accessible
