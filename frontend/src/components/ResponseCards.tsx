@@ -20,7 +20,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
   return (
     <div className="grid lg:grid-cols-2 gap-8 max-w-full">
       {/* Standard LLM Response */}
-      <div className="glass-strong rounded-2xl p-8 shadow-premium-lg hover-lift-premium min-h-[600px] max-h-[80vh] flex flex-col">
+      <div className="glass-strong rounded-lg p-8 shadow-premium-lg hover-lift-premium min-h-[600px] max-h-[80vh] flex flex-col">
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center flex-shrink-0">
             <svg 
@@ -65,7 +65,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
             ) : (
               <div className="flex items-center justify-center h-40">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full glass flex items-center justify-center mb-4 mx-auto">
+                  <div className="w-12 h-12 rounded-lg glass flex items-center justify-center mb-4 mx-auto">
                     <svg 
                       width="20" 
                       height="20" 
@@ -90,7 +90,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
       </div>
 
       {/* RAG Response */}
-      <div className="glass-strong rounded-2xl p-8 shadow-premium-lg hover-glow-green min-h-[600px] max-h-[80vh] flex flex-col">
+      <div className="glass-strong rounded-lg p-8 shadow-premium-lg hover-glow-green min-h-[600px] max-h-[80vh] flex flex-col">
         <div className="flex items-center space-x-3 mb-6">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-green">
             <svg 
@@ -154,7 +154,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                                   fontSize: 'inherit', 
                                   background: 'rgba(0, 210, 106, 0.1)', 
                                   border: '1px solid rgba(0, 210, 106, 0.2)',
-                                  borderRadius: '4px',
+                                  borderRadius: '3px',
                                   padding: '1px 4px',
                                   margin: '0 1px'
                                 }}
@@ -189,7 +189,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
             ) : (
               <div className="flex items-center justify-center h-40">
                 <div className="text-center">
-                  <div className="w-12 h-12 rounded-full glass flex items-center justify-center mb-4 mx-auto">
+                  <div className="w-12 h-12 rounded-lg glass flex items-center justify-center mb-4 mx-auto">
                     <svg 
                       width="20" 
                       height="20" 

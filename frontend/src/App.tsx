@@ -84,13 +84,15 @@ function App() {
   return (
     <div className="min-h-screen bg-premium">
       {/* Navigation */}
-      <nav className="relative z-10 px-6 py-6">
+      <nav className="relative z-10 px-6 py-3">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
-                <div className="w-4 h-4 rounded-sm bg-white/20"></div>
-              </div>
+              <img 
+                src="/favicon.ico" 
+                alt="Archived News RAG Logo" 
+                className="w-6 h-6"
+              />
               <h1 className="text-premium-lg font-semibold text-white">
                 Archived News RAG
               </h1>
@@ -99,7 +101,7 @@ function App() {
               href="https://github.com/reddygtvs/Archived-News-RAG" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="glass px-4 py-2 rounded-full hover:border-green-400/20 transition-all duration-200"
+              className="glass px-4 py-2 rounded-lg hover:border-green-400/20 transition-all duration-200"
             >
               <div className="flex items-center space-x-2">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white/70">
@@ -117,9 +119,9 @@ function App() {
       <main className="max-w-6xl mx-auto px-6 pb-20">
         {/* Hero Section */}
         <div className="text-center mb-16 animate-fade-up">
-          <div className="inline-flex items-center glass px-4 py-2 rounded-full mb-6">
+          <div className="inline-flex items-center glass px-4 py-2 rounded-lg mb-6">
             <span className="text-premium-sm font-medium text-green-400 uppercase tracking-wider">
-              Document Retrieval
+              Retrieval from 110K+ articles
             </span>
           </div>
           

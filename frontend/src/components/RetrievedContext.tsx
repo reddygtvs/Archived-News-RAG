@@ -51,10 +51,10 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
           {retrievedContext.map((item, index) => (
             <div
               key={item.article_id || index}
-              className="glass rounded-xl p-4 hover-lift-premium"
+              className="glass rounded-lg p-4 hover-lift-premium"
             >
               <div className="flex items-start space-x-3 mb-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-green-400 flex items-center justify-center">
+                <div className="flex-shrink-0 w-6 h-6 rounded bg-green-400 flex items-center justify-center">
                   <span className="text-xs font-bold text-black">
                     {index + 1}
                   </span>
@@ -89,13 +89,13 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
                   </h4>
                   
                   <div className="flex flex-wrap gap-2 mb-2">
-                    <div className="glass px-2 py-1 rounded-full">
+                    <div className="glass px-2 py-1 rounded">
                       <span className="text-xs text-white/70">
                         {formatDate(item.date)}
                       </span>
                     </div>
                     {typeof item.min_distance === "number" && (
-                      <div className="glass px-2 py-1 rounded-full border-green-400/20">
+                      <div className="glass px-2 py-1 rounded border-green-400/20">
                         <span className="text-xs text-green-400 font-medium">
                           Similarity: {(1 - item.min_distance).toFixed(3)}
                         </span>

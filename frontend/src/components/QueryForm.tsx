@@ -20,7 +20,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
     <div className="mb-16">
       <form onSubmit={onSubmit} className="flex justify-center">
         <div className="relative w-full max-w-3xl">
-          <div className="glass-strong rounded-2xl p-2 shadow-premium-lg">
+          <div className="glass-strong rounded-lg p-2 shadow-premium-lg">
             <div className="relative">
               <input
                 type="text"
@@ -29,7 +29,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
                 onChange={onQueryChange}
                 disabled={true}
                 readOnly={true}
-                className="w-full h-14 px-6 pr-20 text-premium-base text-white placeholder-white/40 bg-transparent border-0 focus:outline-none cursor-not-allowed disabled:opacity-70 rounded-xl"
+                className="w-full h-14 px-6 pr-20 text-premium-base text-white placeholder-white/40 bg-transparent border-0 focus:outline-none cursor-not-allowed disabled:opacity-70 rounded-lg"
                 style={{
                   fontFamily: 'inherit',
                   letterSpacing: '-0.01em'
@@ -45,7 +45,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
                     : 'linear-gradient(135deg, #00d26a, #00b359)',
                   color: loading || !query.trim() ? 'rgb(156, 163, 175)' : '#000',
                   border: loading || !query.trim() ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-                  borderRadius: '8px',
+                  borderRadius: '6px',
                   boxShadow: loading || !query.trim() 
                     ? '0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)' 
                     : '0 4px 12px rgba(0, 210, 106, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)',
@@ -75,7 +75,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
       
       {error && (
         <div className="mt-6 max-w-3xl mx-auto">
-          <div className="glass border-red-500/20 bg-red-500/5 rounded-xl p-4">
+          <div className="glass border-red-500/20 bg-red-500/5 rounded-lg p-4">
             <div className="flex items-center space-x-3">
               <div className="flex-shrink-0">
                 <svg 

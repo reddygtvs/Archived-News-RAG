@@ -105,12 +105,12 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
             width: 280px;
             height: 140px;
             margin-right: 16px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
             color: #ffffff;
             text-align: left;
             cursor: pointer;
@@ -119,7 +119,11 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
             justify-content: space-between;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 
+              0 1px 2px rgba(0, 0, 0, 0.05),
+              0 2px 8px rgba(0, 0, 0, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.03);
           }
 
           .premium-ticker-item::before {
@@ -128,7 +132,7 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
             inset: 0;
             padding: 1px;
             background: linear-gradient(135deg, rgba(0, 210, 106, 0.4), rgba(0, 210, 106, 0.1), transparent 70%);
-            border-radius: 12px;
+            border-radius: 8px;
             mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             mask-composite: exclude;
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -142,40 +146,42 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
           }
           
           .premium-ticker-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(0, 210, 106, 0.2);
-            transform: translateY(-3px) scale(1.02);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+            border-color: rgba(0, 210, 106, 0.15);
+            transform: translateY(-2px);
             box-shadow: 
-              0 8px 16px rgba(0, 0, 0, 0.2),
-              0 16px 32px rgba(0, 0, 0, 0.15),
-              0 24px 64px rgba(0, 0, 0, 0.1),
-              0 0 0 1px rgba(0, 210, 106, 0.15);
+              0 4px 8px rgba(0, 0, 0, 0.12),
+              0 8px 24px rgba(0, 0, 0, 0.15),
+              0 16px 48px rgba(0, 0, 0, 0.1),
+              0 0 0 1px rgba(0, 210, 106, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
           }
           
           .premium-ticker-category {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             color: #00d26a;
-            margin-bottom: 8px;
-            opacity: 0.9;
+            margin-bottom: 12px;
+            opacity: 0.95;
             line-height: 1.2;
           }
           
           .premium-ticker-question {
             font-size: 15px;
-            line-height: 1.4;
-            font-weight: 400;
+            line-height: 1.45;
+            font-weight: 500;
             color: #ffffff;
             flex: 1;
             display: flex;
             align-items: center;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.015em;
+            opacity: 0.95;
           }
           
           .premium-ticker-wrapper-reverse {
-            margin-top: 16px;
+            margin-top: -12px;
           }
           
           .premium-ticker-content-reverse {
@@ -204,10 +210,7 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
             100% { transform: translate3d(0, 0, 0); }
           }
 
-          /* Pause animations on hover for better UX */
-          .premium-ticker-wrapper:hover .premium-ticker-content {
-            animation-play-state: paused;
-          }
+          /* Keep animations running always - no pause on hover */
 
           /* Ensure smooth performance across all devices */
           @media (max-width: 640px) {
