@@ -8,6 +8,7 @@ import { getHardcodedResponse } from "./services/hardcodedResponses";
 import SampleQuestions from "./components/SampleQuestions";
 import QueryForm from "./components/QueryForm";
 import ResponseCards from "./components/ResponseCards";
+import RetrievedContext from "./components/RetrievedContext";
 
 const API_URL = "http://localhost:5002/api/query";
 
@@ -158,9 +159,15 @@ function App() {
             <ResponseCards
               standardResponse={standardResponse}
               ragResponse={ragResponse}
-              retrievedContext={retrievedContext}
               loading={loading}
             />
+            
+            {/* Source References Section */}
+            {retrievedContext.length > 0 && (
+              <div className="w-full max-w-full lg:items-start mt-4 sm:mt-6">
+                <RetrievedContext retrievedContext={retrievedContext} />
+              </div>
+            )}
           </div>
         )}
       </main>

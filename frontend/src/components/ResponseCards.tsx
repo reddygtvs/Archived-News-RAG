@@ -1,20 +1,16 @@
 // frontend/src/components/ResponseCards.tsx
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { RetrievedContextItem } from "../types";
-import RetrievedContext from "./RetrievedContext";
 
 interface ResponseCardsProps {
   standardResponse: string;
   ragResponse: string;
-  retrievedContext: RetrievedContextItem[];
   loading: boolean;
 }
 
 const ResponseCards: React.FC<ResponseCardsProps> = ({ 
   standardResponse, 
   ragResponse, 
-  retrievedContext, 
   loading 
 }) => {
   return (
@@ -116,8 +112,8 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
           </div>
         </div>
         
-        <div className="border-t border-white/10 pt-4 sm:pt-6 flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto scrollbar-premium mb-4 sm:mb-6">
+        <div className="border-t border-white/10 pt-4 sm:pt-6 flex-1 overflow-hidden">
+          <div className="h-full overflow-y-auto scrollbar-premium">
             {loading && !ragResponse ? (
               <div className="flex items-center justify-center h-40">
                 <div className="flex flex-col items-center space-y-4">
@@ -143,9 +139,8 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                               <button
                                 key={index}
                                 onClick={() => {
-                                  const referencesSection = document.querySelector('details');
+                                  const referencesSection = document.querySelector('[data-source-references]');
                                   if (referencesSection) {
-                                    referencesSection.open = true;
                                     referencesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                                   }
                                 }}
@@ -169,7 +164,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                         });
                       };
 
-                      const processChildren = (children: any): any => {
+                      const processChildren = (children: React.ReactNode): React.ReactNode => {
                         if (typeof children === 'string') {
                           return processText(children);
                         }
@@ -212,8 +207,6 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
               </div>
             )}
           </div>
-          
-          <RetrievedContext retrievedContext={retrievedContext} />
         </div>
       </div>
     </div>
