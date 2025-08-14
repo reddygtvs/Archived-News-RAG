@@ -139,60 +139,41 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
               <div className="prose-premium">
                 <ReactMarkdown
                   components={{
-                    p: ({ children }) => {
-                      const processText = (text: string) => {
-                        if (typeof text !== 'string') return text;
-                        
-                        const parts = text.split(/(\[\d+(?:,\s*\d+)*\])/g);
-                        return parts.map((part, index) => {
-                          const match = part.match(/^\[(\d+(?:,\s*\d+)*)\]$/);
-                          if (match) {
-                            return (
-                              <button
-                                key={index}
-                                onClick={() => {
-                                  const referencesSection = document.querySelector('[data-source-references]');
-                                  if (referencesSection) {
-                                    referencesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                                  }
-                                }}
-                                className="inline-flex items-center text-green-400 hover:text-green-300 transition-colors cursor-pointer font-medium"
-                                style={{ 
-                                  fontSize: 'inherit', 
-                                  background: 'linear-gradient(135deg, rgba(0, 210, 106, 0.08), rgba(0, 210, 106, 0.12))', 
-                                  border: '1px solid rgba(0, 210, 106, 0.15)',
-                                  borderRadius: '3px',
-                                  padding: '2px 5px',
-                                  margin: '0 1px',
-                                  backdropFilter: 'blur(8px)',
-                                  boxShadow: 'inset 0 1px 0 rgba(0, 210, 106, 0.1)'
-                                }}
-                              >
-                                {part}
-                              </button>
-                            );
-                          }
-                          return part;
-                        });
-                      };
-
-                      const processChildren = (children: React.ReactNode): React.ReactNode => {
-                        if (typeof children === 'string') {
-                          return processText(children);
-                        }
-                        if (Array.isArray(children)) {
-                          return children.map((child) => 
-                            typeof child === 'string' ? processText(child) : child
-                          );
-                        }
-                        return children;
-                      };
-
-                      return <p>{processChildren(children)}</p>;
+                    code: ({ children, inline }) => {
+                      if (typeof children === 'string' && children.startsWith('SRCREF_[')) {
+                        const sourceRef = children.replace('SRCREF_', '');
+                        return (
+                          <button
+                            onClick={() => {
+                              const referencesSection = document.querySelector('[data-source-references]');
+                              if (referencesSection) {
+                                referencesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                              }
+                            }}
+                            className="text-green-400 hover:text-green-300 transition-colors cursor-pointer font-medium"
+                            style={{ 
+                              fontSize: '0.75rem',
+                              lineHeight: '1',
+                              background: 'linear-gradient(135deg, rgba(0, 210, 106, 0.08), rgba(0, 210, 106, 0.12))', 
+                              border: '1px solid rgba(0, 210, 106, 0.15)',
+                              borderRadius: '2px',
+                              padding: '1px 3px',
+                              margin: '0',
+                              backdropFilter: 'blur(8px)',
+                              boxShadow: 'inset 0 1px 0 rgba(0, 210, 106, 0.1)',
+                              verticalAlign: 'baseline',
+                              display: 'inline'
+                            }}
+                          >
+                            {sourceRef}
+                          </button>
+                        );
+                      }
+                      return <code>{children}</code>;
                     }
                   }}
                 >
-                  {ragResponse}
+                  {ragResponse.replace(/(\[[0-9, ]+\])/g, '`SRCREF_$1`')}
                 </ReactMarkdown>
               </div>
             ) : (
