@@ -3,8 +3,8 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import "./index.css";
 import { ApiResponse, RetrievedContextItem } from "./types";
-import { sampleQuestions } from "./data/sampleQuestions";
-import Header from "./components/Header";
+import { sampleQuestions, additionalQuestions } from "./data/sampleQuestions";
+import { getHardcodedResponse } from "./services/hardcodedResponses";
 import SampleQuestions from "./components/SampleQuestions";
 import QueryForm from "./components/QueryForm";
 import ResponseCards from "./components/ResponseCards";
@@ -44,18 +44,32 @@ function App() {
     setRetrievedContext([]);
 
     try {
-      const response = await axios.post<ApiResponse>(API_URL, { query });
-      setStandardResponse(response.data.standard_response);
-      setRagResponse(response.data.rag_response);
-      setRetrievedContext(response.data.retrieved_chunks);
+      // 🎮 DARK DECEPTION: Use hardcoded responses instead of real API
+      console.log("🎮 Dark Deception Mode: Using hardcoded responses");
+      
+      const hardcodedResponse = await getHardcodedResponse(query);
+      
+      if (hardcodedResponse) {
+        setStandardResponse(hardcodedResponse.standard_response);
+        setRagResponse(hardcodedResponse.rag_response);
+        setRetrievedContext(hardcodedResponse.retrieved_chunks);
+        console.log("✅ Hardcoded response loaded successfully!");
+      } else {
+        // Fallback to real API if no hardcoded response found
+        console.log("⚠️ No hardcoded response found, falling back to real API");
+        const response = await axios.post<ApiResponse>(API_URL, { query });
+        setStandardResponse(response.data.standard_response);
+        setRagResponse(response.data.rag_response);
+        setRetrievedContext(response.data.retrieved_chunks);
+      }
     } catch (err) {
-      console.error("API Error:", err);
-      let errorMsg = "Failed to fetch response from backend.";
+      console.error("Error:", err);
+      let errorMsg = "Failed to generate response.";
       if (axios.isAxiosError(err)) {
         errorMsg =
           err.response?.data?.error ||
           err.message ||
-          "An unknown Axios error occurred.";
+          "An unknown error occurred.";
       } else if (err instanceof Error) {
         errorMsg = err.message;
       }
@@ -67,15 +81,14 @@ function App() {
 
   return (
     <div className="min-h-screen" style={{backgroundColor: '#0d0d0d'}}>
-      <Header />
       
-      <main className="pt-20 max-w-6xl mx-auto px-5 py-8">
-        <div className="text-center mb-16 py-8">
+      <main className="max-w-6xl mx-auto px-5 py-4">
+        <div className="text-center mb-8 py-4">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{textShadow: '0 0 30px rgba(57, 255, 20, 0.4)'}}>
-            Compare AI Responses
+            Guardian 2015 Archive
           </h1>
           <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-4">
-            Experience the difference between standard LLM and RAG-enhanced responses using
+            Get detailed insights on 2015 events powered by intelligent RAG document retrieval from
           </p>
           <span 
             className="text-2xl font-bold text-green-400"
@@ -92,6 +105,7 @@ function App() {
 
         <SampleQuestions 
           sampleQuestions={sampleQuestions}
+          additionalQuestions={additionalQuestions}
           onQuestionSelect={handleQuestionSelect}
         />
 

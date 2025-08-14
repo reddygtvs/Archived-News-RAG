@@ -13,3 +13,16 @@ export const sampleQuestions: SampleQuestion[] = [
   { id: "9", question: "What social issues dominated 2015?", category: "Society" },
   { id: "10", question: "What entertainment news defined 2015?", category: "Entertainment" }
 ];
+
+export const additionalQuestions: SampleQuestion[] = [
+  { id: "11", question: "What happened during the European refugee crisis in 2015?", category: "Crisis" },
+  { id: "12", question: "How did the Paris attacks affect global security in 2015?", category: "Security" },
+  { id: "13", question: "What were the key developments in the Syrian civil war in 2015?", category: "Conflict" },
+  { id: "14", question: "Which companies dominated the stock market in 2015?", category: "Markets" },
+  { id: "15", question: "What major celebrity scandals happened in 2015?", category: "Celebrity" },
+  { id: "16", question: "How did social media evolve throughout 2015?", category: "Digital" },
+  { id: "17", question: "What were the biggest medical discoveries in 2015?", category: "Medicine" },
+  { id: "18", question: "Which films and TV shows dominated 2015?", category: "Media" },
+  { id: "19", question: "What environmental disasters occurred in 2015?", category: "Disasters" },
+  { id: "20", question: "How did the UK general election impact Europe in 2015?", category: "Elections" }
+];
