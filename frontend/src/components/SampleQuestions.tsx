@@ -68,20 +68,30 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({
             width: 100vw;
             left: 50%;
             transform: translateX(-50%);
-            mask-image: linear-gradient(
-              90deg, 
-              transparent 0%, 
-              rgba(0,0,0,1) 2%, 
-              rgba(0,0,0,1) 98%, 
-              transparent 100%
-            );
-            -webkit-mask-image: linear-gradient(
-              90deg, 
-              transparent 0%, 
-              rgba(0,0,0,1) 2%, 
-              rgba(0,0,0,1) 98%, 
-              transparent 100%
-            );
+          }
+          
+          .premium-ticker-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(to right, #0a0a0a, transparent);
+            z-index: 10;
+            pointer-events: none;
+          }
+          
+          .premium-ticker-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 60px;
+            height: 100%;
+            background: linear-gradient(to left, #0a0a0a, transparent);
+            z-index: 10;
+            pointer-events: none;
           }
           
           .premium-ticker-content {
