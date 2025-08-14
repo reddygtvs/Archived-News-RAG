@@ -18,47 +18,117 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
   loading 
 }) => {
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-full">
+    <div className="grid lg:grid-cols-2 gap-8 max-w-full">
       {/* Standard LLM Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', minHeight: '600px', maxHeight: '80vh', borderRadius: '8px'}} className="p-6">
-        <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
-          Standard LLM Response
-        </h2>
-        <div className="border-t pt-4" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 60px)'}}>
-          <div style={{height: '100%'}} className="overflow-y-auto pr-2 scrollbar-thin">
+      <div className="glass-strong rounded-2xl p-8 shadow-premium-lg hover-lift-premium min-h-[600px] max-h-[80vh] flex flex-col">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center flex-shrink-0">
+            <svg 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              className="text-white"
+            >
+              <path d="M12 2L2 7v10c0 5.55 3.84 10 9 11 1.16-.21 2.31-.48 3.38-.84"/>
+              <path d="M22 12c0 1.38-.35 2.68-.97 3.82"/>
+              <path d="M19 16l-3-3 1.5-1.5L19 13l4-4"/>
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-premium-lg font-semibold text-white">
+              Standard Response
+            </h2>
+            <p className="text-premium-sm text-white/60">
+              General knowledge without context
+            </p>
+          </div>
+        </div>
+        
+        <div className="border-t border-white/10 pt-6 flex-1 overflow-hidden">
+          <div className="h-full overflow-y-auto scrollbar-premium">
             {loading && !standardResponse ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-400 border-t-transparent"></div>
+              <div className="flex items-center justify-center h-40">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-8 h-8 border-2 border-green-400/30 border-t-green-400 rounded-full animate-spin"></div>
+                  <span className="text-premium-sm text-white/60 font-medium">
+                    Generating response...
+                  </span>
+                </div>
               </div>
             ) : standardResponse ? (
-              <div className="prose prose-invert max-w-none">
+              <div className="prose-premium">
                 <ReactMarkdown>{standardResponse}</ReactMarkdown>
               </div>
             ) : (
-              <p style={{color: 'rgb(181, 179, 173)'}}>
-                No response yet or an error occurred.
-              </p>
+              <div className="flex items-center justify-center h-40">
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full glass flex items-center justify-center mb-4 mx-auto">
+                    <svg 
+                      width="20" 
+                      height="20" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="1.5" 
+                      className="text-white/40"
+                    >
+                      <path d="M8 12h8"/>
+                      <path d="M12 8v8"/>
+                    </svg>
+                  </div>
+                  <p className="text-premium-sm text-white/50">
+                    No response available
+                  </p>
+                </div>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       {/* RAG Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', minHeight: '600px', maxHeight: '80vh', borderRadius: '8px'}} className="p-6">
-        <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
-          RAG Response
-          <span className="text-sm font-normal ml-2" style={{color: 'rgb(181, 179, 173)'}}>
-            (with 2015 News Context)
-          </span>
-        </h2>
-        <div className="border-t pt-4 flex flex-col" style={{borderColor: 'rgb(55, 55, 53)', height: 'calc(100% - 50px)'}}>
-          <div style={{flex: '1'}} className="overflow-y-auto pr-2 scrollbar-thin">
+      <div className="glass-strong rounded-2xl p-8 shadow-premium-lg hover-glow-green min-h-[600px] max-h-[80vh] flex flex-col">
+        <div className="flex items-center space-x-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0 shadow-green">
+            <svg 
+              width="16" 
+              height="16" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              className="text-white"
+            >
+              <path d="M9 12l2 2 4-4"/>
+              <path d="M21 12c0 1.38-.35 2.68-.97 3.82a10.02 10.02 0 01-2.31 3.1 10.02 10.02 0 01-3.1 2.31c-1.14.62-2.44.97-3.82.97-1.38 0-2.68-.35-3.82-.97a10.02 10.02 0 01-3.1-2.31A10.02 10.02 0 013 15.82 10.02 10.02 0 012 12c0-1.38.35-2.68.97-3.82a10.02 10.02 0 012.31-3.1A10.02 10.02 0 018.38 2.03C9.52 1.41 10.82 1.06 12.2 1.06c1.38 0 2.68.35 3.82.97"/>
+            </svg>
+          </div>
+          <div>
+            <h2 className="text-premium-lg font-semibold text-white">
+              RAG-Enhanced Response
+            </h2>
+            <p className="text-premium-sm text-green-400/80 font-medium">
+              With 2015 news context
+            </p>
+          </div>
+        </div>
+        
+        <div className="border-t border-white/10 pt-6 flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto scrollbar-premium mb-6">
             {loading && !ragResponse ? (
-              <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-green-400 border-t-transparent"></div>
+              <div className="flex items-center justify-center h-40">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="w-8 h-8 border-2 border-green-400/30 border-t-green-400 rounded-full animate-spin"></div>
+                  <span className="text-premium-sm text-white/60 font-medium">
+                    Retrieving context...
+                  </span>
+                </div>
               </div>
             ) : ragResponse ? (
-              <div className="prose prose-invert max-w-none">
+              <div className="prose-premium">
                 <ReactMarkdown
                   components={{
                     p: ({ children }) => {
@@ -79,8 +149,15 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                                     referencesSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                                   }
                                 }}
-                                className="inline text-green-400 hover:text-green-300 transition-colors cursor-pointer"
-                                style={{ fontSize: 'inherit', background: 'none', border: 'none', padding: 0 }}
+                                className="inline-flex items-center text-green-400 hover:text-green-300 transition-colors cursor-pointer font-medium"
+                                style={{ 
+                                  fontSize: 'inherit', 
+                                  background: 'rgba(0, 210, 106, 0.1)', 
+                                  border: '1px solid rgba(0, 210, 106, 0.2)',
+                                  borderRadius: '4px',
+                                  padding: '1px 4px',
+                                  margin: '0 1px'
+                                }}
                               >
                                 {part}
                               </button>
@@ -110,9 +187,27 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                 </ReactMarkdown>
               </div>
             ) : (
-              <p style={{color: 'rgb(181, 179, 173)'}}>
-                No response yet or an error occurred.
-              </p>
+              <div className="flex items-center justify-center h-40">
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full glass flex items-center justify-center mb-4 mx-auto">
+                    <svg 
+                      width="20" 
+                      height="20" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="1.5" 
+                      className="text-white/40"
+                    >
+                      <path d="M8 12h8"/>
+                      <path d="M12 8v8"/>
+                    </svg>
+                  </div>
+                  <p className="text-premium-sm text-white/50">
+                    No response available
+                  </p>
+                </div>
+              </div>
             )}
           </div>
           
