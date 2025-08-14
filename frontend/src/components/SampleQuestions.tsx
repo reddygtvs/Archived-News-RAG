@@ -8,18 +8,23 @@ interface SampleQuestionsProps {
   onQuestionSelect: (question: string) => void;
 }
 
-const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, additionalQuestions, onQuestionSelect }) => {
+const SampleQuestions: React.FC<SampleQuestionsProps> = ({
+  sampleQuestions,
+  additionalQuestions,
+  onQuestionSelect,
+}) => {
   return (
     <div className="mb-12">
       <div className="text-center mb-8">
-        <h2 className="text-premium-xl font-semibold text-white mb-2">
-          Sample Queries
+        <h2 className="text-premium-xl md:text-premium-2xl font-semibold text-white tracking-tight">
+          <span className="text-white/90">Sample</span>{" "}
+          <span className="text-gradient-green">Queries</span>
         </h2>
-        <p className="text-premium-sm text-white/60">
+        <p className="text-premium-sm text-white/60 max-w-md mx-auto">
           Click any query to get started
         </p>
       </div>
-      
+
       {/* First scroller - left to right */}
       <div className="premium-ticker-wrapper">
         <div className="premium-ticker-content">
@@ -51,13 +56,14 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
           ))}
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{
-        __html: `
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
           .premium-ticker-wrapper {
             overflow: hidden;
             background: transparent;
-            padding: 12px 0 20px 0;
+            padding: 8px 0 12px 0;
             position: relative;
             width: 100vw;
             left: 50%;
@@ -181,7 +187,7 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
           }
           
           .premium-ticker-wrapper-reverse {
-            margin-top: -12px;
+            margin-top: -4px;
           }
           
           .premium-ticker-content-reverse {
@@ -257,8 +263,9 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
               padding: 0 20px;
             }
           }
-        `
-      }} />
+        `,
+        }}
+      />
     </div>
   );
 };
