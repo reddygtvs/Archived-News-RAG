@@ -3,7 +3,8 @@ import faiss
 import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 import pickle
 import os
 import time
@@ -24,11 +25,7 @@ NUM_FULL_ARTICLES_TO_USE = 7 # Number of full articles to provide as context
 RETRIEVE_MULTIPLIER = 2 # Retrieve initial_k = NUM_FULL_ARTICLES_TO_USE * RETRIEVE_MULTIPLIER chunks
 EVALUATOR_LLM_MODEL_NAME = "gemini-1.5-pro-latest" # LLM for evaluation
 MAX_ARTICLE_TEXT_LEN = 50000 # Character limit per article in RAG prompt context
-# Defining safety settings to disable potential blocking
-SAFETY_SETTINGS_OFF = [{"category": c, "threshold": "BLOCK_NONE"} for c in [
-    "HARM_CATEGORY_HARASSMENT", "HARM_CATEGORY_HATE_SPEECH",
-    "HARM_CATEGORY_SEXUALLY_EXPLICIT", "HARM_CATEGORY_DANGEROUS_CONTENT"
-]]
+
 
 
 class RAGSystem:
@@ -45,19 +42,18 @@ class RAGSystem:
             raise ValueError("GOOGLE_API_KEY is missing.")
 
         try:
-            genai.configure(api_key=GEMINI_API_KEY)
-            logger.info("Google API Key configured.")
+            # Initialize the GenAI client
+            self.client = genai.Client(api_key=GEMINI_API_KEY)
+            logger.info("Google GenAI Client configured.")
         except Exception as e:
-            logger.error(f"CRITICAL: Failed to configure Google API key: {e}", exc_info=True)
+            logger.error(f"CRITICAL: Failed to configure Google GenAI client: {e}", exc_info=True)
             raise
 
-        # Initialize Generator LLM (Flash 1.5)
+        # Initialize Generator LLM (2.5 Flash)
         self.generator_llm = self._initialize_llm(GEMINI_MODEL_NAME, "Generator")
 
         # Initialize Evaluator LLM (Pro 1.5)
         self.evaluator_llm = self._initialize_llm(EVALUATOR_LLM_MODEL_NAME, "Evaluator")
-        if self.evaluator_llm is None:
-            logger.warning("LLM-based evaluation will be skipped as Evaluator LLM failed to initialize.")
 
         # Load Embedding Model
         self.embedder = self._load_embedding_model()
@@ -78,13 +74,16 @@ class RAGSystem:
 
         logger.info("RAG System Initialized Successfully.")
 
-    def _initialize_llm(self, model_name: str, llm_type: str) -> genai.GenerativeModel | None:
-        """Initializes a Google Generative AI model."""
-        llm_instance = None
+    def _initialize_llm(self, model_name: str, llm_type: str) -> dict | None:
+        """Initializes a Google Generative AI model client."""
         try:
-            llm_instance = genai.GenerativeModel(model_name)
+            # Store model name and client info for later use
+            model_config = {
+                'client': self.client,
+                'model_name': model_name
+            }
             logger.info(f"Loaded {llm_type} LLM: {model_name}")
-            return llm_instance
+            return model_config
         except Exception as e:
             logger.error(f"Failed to initialize {llm_type} LLM ({model_name}): {e}. This functionality will be unavailable.", exc_info=True)
             return None 
@@ -282,39 +281,46 @@ class RAGSystem:
 
         return top_articles_data, retrieval_duration
 
-    def _call_llm(self, llm_instance, prompt: str, description: str) -> tuple[str, float]:
+    def _call_llm(self, llm_config, prompt: str, description: str) -> tuple[str, float]:
         """Helper function to call an LLM, handle errors, and time the call."""
-        logger.info(f"Sending prompt to {description} LLM ({llm_instance.model_name if llm_instance else 'N/A'})...")
+        logger.info(f"Sending prompt to {description} LLM ({llm_config['model_name'] if llm_config else 'N/A'})...")
         response_text = f"Error: Failed to generate {description} response."
         llm_call_duration = 0.0
-        if llm_instance is None:
+        if llm_config is None:
             logger.error(f"{description} LLM is not available.")
             return f"Error: {description} LLM not initialized.", 0.0
 
         start_time = time.time()
         try:
-            response_obj = llm_instance.generate_content(
-                prompt,
-                safety_settings=SAFETY_SETTINGS_OFF
+            # Configure thinking budget for 2.5 models
+            config = None
+            if "2.5" in llm_config['model_name']:
+                config = types.GenerateContentConfig(
+                    thinking_config=types.ThinkingConfig(thinking_budget=0)  # Disable thinking
                 )
+            
+            response_obj = llm_config['client'].models.generate_content(
+                model=llm_config['model_name'],
+                contents=prompt,
+                config=config
+            )
 
             # For checking of response object structure
-            if hasattr(response_obj, 'prompt_feedback') and response_obj.prompt_feedback.block_reason:
+            if not response_obj.candidates:
+                 block_reason = getattr(getattr(response_obj, 'prompt_feedback', None), 'block_reason', None)
+                 logger.warning(f"{description} LLM response had no candidates. Block reason: {block_reason}")
+                 response_text = f"Error: Content generation failed (no candidates){f', likely due to safety settings ({block_reason})' if block_reason else '.'}"
+            elif hasattr(response_obj, 'prompt_feedback') and response_obj.prompt_feedback and response_obj.prompt_feedback.block_reason:
                  block_reason = response_obj.prompt_feedback.block_reason
                  logger.warning(f"{description} LLM blocked prompt. Reason: {block_reason}")
                  response_text = f"Error: Content generation blocked by safety settings ({block_reason})..."
-            elif not response_obj.candidates:
-                 logger.warning(f"{description} LLM response had no candidates.")
-                 block_reason = getattr(getattr(response_obj, 'prompt_feedback', None), 'block_reason', None)
-                 response_text = f"Error: Content generation failed (no candidates){f', likely due to safety settings ({block_reason})' if block_reason else '.'}"
             else:
                 try:
-                    # Access parts which should be a list, take the first part's text
-                    response_text = response_obj.candidates[0].content.parts[0].text
+                    # Access response text
+                    response_text = response_obj.text
                     logger.info(f"{description} LLM response extracted successfully.")
                 except (IndexError, AttributeError, TypeError) as e:
                      logger.error(f"Could not extract text from {description} LLM response structure: {e}", exc_info=True)
-                     logger.error(f"Full Candidate[0] Content (if exists): {getattr(response_obj.candidates[0], 'content', 'N/A')}")
                      response_text = f"Error: Could not parse {description} LLM's response structure."
         except Exception as e:
             logger.error(f"Exception during {description} LLM call: {e}", exc_info=True)
@@ -322,6 +328,7 @@ class RAGSystem:
         finally:
             end_time = time.time()
             llm_call_duration = end_time - start_time
+            logger.info(f"LLM generate_content call duration ({description}): {llm_call_duration:.4f} seconds")
             logger.info(f"LLM generate_content call duration ({description}): {llm_call_duration:.4f} seconds")
 
         return response_text, llm_call_duration

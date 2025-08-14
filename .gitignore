@@ -43,3 +43,6 @@ backend/data/metadata.pkl
 backend/data/news_index_binary.npy
 backend/a_data/news_index_quantized.npy
 backend/data_backup/
+
+# Optimization and benchmark files
+backend/GEMINI_2.5_FLASH_OPTIMIZATION.md
