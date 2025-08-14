@@ -1,5 +1,5 @@
 // frontend/src/components/RetrievedContext.tsx
-import React from "react";
+import React, { useState } from "react";
 import { RetrievedContextItem } from "../types";
 
 interface RetrievedContextProps {
@@ -7,6 +7,8 @@ interface RetrievedContextProps {
 }
 
 const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
   const formatDate = (dateString: string | undefined | null) => {
     if (!dateString) return "N/A";
     try {
@@ -25,33 +27,36 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
   }
 
   return (
-    <div className="border-t border-white/10 pt-6">
-      <details className="group">
-        <summary className="cursor-pointer hover:text-green-400 transition-all duration-200 mb-4 flex items-center text-premium-sm font-medium text-white/90">
-          <svg 
-            className="w-4 h-4 mr-3 transition-transform duration-200 group-open:rotate-90 text-green-400" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-          <span className="flex items-center space-x-2">
-            <span>Source References</span>
-            <div className="glass px-2 py-1 rounded-full">
-              <span className="text-xs font-semibold text-green-400">
-                {retrievedContext.length}
-              </span>
-            </div>
-          </span>
-        </summary>
-        
-        <div className="max-h-64 overflow-y-auto space-y-3 scrollbar-premium">
+    <div className="border-t border-white/10 pt-6 relative">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer hover:text-green-400 transition-all duration-200 mb-0 flex items-center text-premium-sm font-medium text-white/90 w-full text-left"
+      >
+        <svg 
+          className={`w-4 h-4 mr-3 transition-transform duration-200 text-green-400 ${isOpen ? 'rotate-90' : ''}`}
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+        <span className="flex items-center space-x-2">
+          <span>Source References</span>
+          <div className="glass px-2 py-1 rounded-full">
+            <span className="text-xs font-semibold text-green-400">
+              {retrievedContext.length}
+            </span>
+          </div>
+        </span>
+      </button>
+      
+      {isOpen && (
+        <div className="absolute top-full left-0 right-0 z-50 mt-4 max-h-64 overflow-y-auto space-y-3 scrollbar-premium glass-strong rounded-lg p-4 shadow-premium-lg">
           {retrievedContext.map((item, index) => (
             <div
               key={item.article_id || index}
-              className="glass rounded-lg p-4 hover-lift-premium"
+              className="glass rounded-lg p-4"
             >
               <div className="flex items-start space-x-3 mb-3">
                 <div className="flex-shrink-0 w-6 h-6 rounded bg-green-400 flex items-center justify-center">
@@ -111,7 +116,7 @@ const RetrievedContext: React.FC<RetrievedContextProps> = ({ retrievedContext })
             </div>
           ))}
         </div>
-      </details>
+      )}
     </div>
   );
 };

@@ -18,10 +18,10 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
   loading 
 }) => {
   return (
-    <div className="grid lg:grid-cols-2 gap-8 max-w-full">
+    <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 w-full max-w-full lg:items-start">
       {/* Standard LLM Response */}
-      <div className="rounded-lg p-8 min-h-[600px] max-h-[80vh] flex flex-col" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.03)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'}}>
-        <div className="flex items-center space-x-3 mb-6">
+      <div className="rounded-lg p-4 sm:p-6 lg:p-8 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] max-h-[70vh] sm:max-h-[75vh] lg:max-h-[80vh] flex flex-col w-full overflow-x-hidden" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)', border: '1px solid rgba(255, 255, 255, 0.06)', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.03)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'}}>
+        <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
           <div className="w-8 h-8 rounded bg-gradient-to-br from-gray-400 to-gray-600 flex items-center justify-center flex-shrink-0" style={{boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)'}}>
             <svg 
               width="16" 
@@ -38,22 +38,22 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
             </svg>
           </div>
           <div>
-            <h2 className="text-premium-base font-semibold text-white" style={{letterSpacing: '-0.025em'}}>
+            <h2 className="text-premium-sm sm:text-premium-base font-semibold text-white" style={{letterSpacing: '-0.025em'}}>
               Standard Response
             </h2>
-            <p className="text-premium-xs text-white/65 font-medium" style={{letterSpacing: '-0.01em'}}>
+            <p className="text-[10px] sm:text-premium-xs text-white/65 font-medium" style={{letterSpacing: '-0.01em'}}>
               General knowledge without context
             </p>
           </div>
         </div>
         
-        <div className="border-t border-white/10 pt-6 flex-1 overflow-hidden">
+        <div className="border-t border-white/10 pt-4 sm:pt-6 flex-1 overflow-hidden">
           <div className="h-full overflow-y-auto scrollbar-premium">
             {loading && !standardResponse ? (
               <div className="flex items-center justify-center h-40">
                 <div className="flex flex-col items-center space-y-4">
                   <div className="w-8 h-8 border-2 border-green-400/30 border-t-green-400 rounded-full animate-spin"></div>
-                  <span className="text-premium-xs text-white/70 font-medium">
+                  <span className="text-[10px] sm:text-premium-xs text-white/70 font-medium">
                     Generating response...
                   </span>
                 </div>
@@ -79,7 +79,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                       <path d="M12 8v8"/>
                     </svg>
                   </div>
-                  <p className="text-premium-xs text-white/60 font-medium">
+                  <p className="text-[10px] sm:text-premium-xs text-white/60 font-medium">
                     No response available
                   </p>
                 </div>
@@ -90,8 +90,8 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
       </div>
 
       {/* RAG Response */}
-      <div className="rounded-lg p-8 min-h-[600px] max-h-[80vh] flex flex-col" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)', border: '1px solid rgba(0, 210, 106, 0.08)', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 210, 106, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.03)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'}}>
-        <div className="flex items-center space-x-3 mb-6">
+      <div className="rounded-lg p-4 sm:p-6 lg:p-8 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] max-h-[70vh] sm:max-h-[75vh] lg:max-h-[80vh] flex flex-col w-full overflow-x-hidden" style={{background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01))', backdropFilter: 'blur(32px)', WebkitBackdropFilter: 'blur(32px)', border: '1px solid rgba(0, 210, 106, 0.08)', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 210, 106, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.03)', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'}}>
+        <div className="flex items-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
           <div className="w-8 h-8 rounded bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center flex-shrink-0" style={{boxShadow: '0 2px 4px rgba(0, 210, 106, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)'}}>
             <svg 
               width="16" 
@@ -107,22 +107,22 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
             </svg>
           </div>
           <div>
-            <h2 className="text-premium-base font-semibold text-white" style={{letterSpacing: '-0.025em'}}>
+            <h2 className="text-premium-sm sm:text-premium-base font-semibold text-white" style={{letterSpacing: '-0.025em'}}>
               RAG-Enhanced Response
             </h2>
-            <p className="text-premium-xs text-green-400/90 font-medium" style={{letterSpacing: '-0.01em'}}>
+            <p className="text-[10px] sm:text-premium-xs text-green-400/90 font-medium" style={{letterSpacing: '-0.01em'}}>
               With 2015 news context
             </p>
           </div>
         </div>
         
-        <div className="border-t border-white/10 pt-6 flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 overflow-y-auto scrollbar-premium mb-6">
+        <div className="border-t border-white/10 pt-4 sm:pt-6 flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 overflow-y-auto scrollbar-premium mb-4 sm:mb-6">
             {loading && !ragResponse ? (
               <div className="flex items-center justify-center h-40">
                 <div className="flex flex-col items-center space-y-4">
                   <div className="w-8 h-8 border-2 border-green-400/30 border-t-green-400 rounded-full animate-spin"></div>
-                  <span className="text-premium-xs text-white/70 font-medium">
+                  <span className="text-[10px] sm:text-premium-xs text-white/70 font-medium">
                     Retrieving context...
                   </span>
                 </div>
@@ -205,7 +205,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
                       <path d="M12 8v8"/>
                     </svg>
                   </div>
-                  <p className="text-premium-xs text-white/60 font-medium">
+                  <p className="text-[10px] sm:text-premium-xs text-white/60 font-medium">
                     No response available
                   </p>
                 </div>
