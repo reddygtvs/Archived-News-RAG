@@ -166,8 +166,7 @@ function App() {
 
           <p className="text-premium-xl text-white/70 max-w-2xl mx-auto leading-relaxed mb-8">
             Get detailed insights on 2015 events powered by RAG technology and
-            <span className="text-green-400 font-medium">
-              {" "}
+            <span className="text-green-400 font-medium block">
               The Guardian's comprehensive archive
             </span>
           </p>
