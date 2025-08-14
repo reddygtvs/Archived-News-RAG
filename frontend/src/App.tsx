@@ -84,10 +84,10 @@ function App() {
   return (
     <div className="min-h-screen" style={{backgroundColor: '#0d0d0d'}}>
       
-      <main className="max-w-6xl mx-auto px-5 py-4">
-        <div className="text-center mb-8 py-4">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight" style={{textShadow: '0 0 30px rgba(57, 255, 20, 0.4)'}}>
-            Guardian 2015 Archive
+      <main className="max-w-7xl mx-auto px-8 py-4">
+        <div className="text-center mb-6 py-2">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{textShadow: '0 0 30px rgba(57, 255, 20, 0.4)'}}>
+            Archived News RAG
           </h1>
           <p className="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-4">
             Get detailed insights on 2015 events powered by intelligent RAG document retrieval from

@@ -10,8 +10,8 @@ interface SampleQuestionsProps {
 
 const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, additionalQuestions, onQuestionSelect }) => {
   return (
-    <div className="mb-8" style={{ paddingTop: '8px' }}>
-      <div className="text-center mb-10">
+    <div className="mb-6">
+      <div className="text-center mb-4">
         <div className="inline-flex items-center px-6 py-3 rounded-full backdrop-blur-md border border-white/10" 
              style={{
                background: 'linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(20, 20, 20, 0.9))',
@@ -163,7 +163,7 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, addi
           }
           
           .ticker-wrapper-reverse {
-            margin-top: 20px;
+            margin-top: 24px;
           }
           
           .ticker-content-reverse {
