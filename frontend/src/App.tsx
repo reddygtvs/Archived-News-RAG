@@ -3,7 +3,7 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 import "./index.css";
 import { ApiResponse, RetrievedContextItem } from "./types";
-import { sampleQuestions } from "./data/sampleQuestions";
+import { sampleQuestions, additionalQuestions } from "./data/sampleQuestions";
 import Header from "./components/Header";
 import SampleQuestions from "./components/SampleQuestions";
 import QueryForm from "./components/QueryForm";
@@ -92,6 +92,7 @@ function App() {
 
         <SampleQuestions 
           sampleQuestions={sampleQuestions}
+          additionalQuestions={additionalQuestions}
           onQuestionSelect={handleQuestionSelect}
         />
 

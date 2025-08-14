@@ -13,6 +13,14 @@ export interface ApiResponse {
   rag_response: string;
   retrieved_chunks: RetrievedContextItem[];
   error?: string;
+  metadata?: {
+    query: string;
+    retrieval_time: number;
+    llm_time: number;
+    total_time: number;
+    chunks_retrieved: number;
+    total_context_length: number;
+  };
 }
 
 export interface SampleQuestion {

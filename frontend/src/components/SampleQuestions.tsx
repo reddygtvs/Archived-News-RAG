@@ -4,10 +4,11 @@ import { SampleQuestion } from "../types";
 
 interface SampleQuestionsProps {
   sampleQuestions: SampleQuestion[];
+  additionalQuestions: SampleQuestion[];
   onQuestionSelect: (question: string) => void;
 }
 
-const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQuestionSelect }) => {
+const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, additionalQuestions, onQuestionSelect }) => {
   return (
     <div className="mb-8" style={{ paddingTop: '8px' }}>
       <div className="text-center mb-10">
@@ -26,11 +27,29 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQu
           </span>
         </div>
       </div>
+      
+      {/* First scroller - left to right */}
       <div className="ticker-wrapper">
         <div className="ticker-content">
           {[...sampleQuestions, ...sampleQuestions].map((q, index) => (
             <button
-              key={`${q.id}-${index}`}
+              key={`primary-${q.id}-${index}`}
+              onClick={() => onQuestionSelect(q.question)}
+              className="ticker-item"
+            >
+              <div className="ticker-category">{q.category}</div>
+              <div className="ticker-question">{q.question}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Second scroller - right to left */}
+      <div className="ticker-wrapper ticker-wrapper-reverse">
+        <div className="ticker-content ticker-content-reverse">
+          {[...additionalQuestions, ...additionalQuestions].map((q, index) => (
+            <button
+              key={`additional-${q.id}-${index}`}
               onClick={() => onQuestionSelect(q.question)}
               className="ticker-item"
             >
@@ -143,9 +162,28 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({ sampleQuestions, onQu
             color: rgba(245, 245, 245, 0.95);
           }
           
+          .ticker-wrapper-reverse {
+            margin-top: 20px;
+          }
+          
+          .ticker-content-reverse {
+            animation: scroll-right 40s linear infinite;
+          }
+          
+          @media (max-width: 768px) {
+            .ticker-content-reverse {
+              animation-duration: 30s;
+            }
+          }
+          
           @keyframes scroll-left {
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(-2600px, 0, 0); }
+          }
+          
+          @keyframes scroll-right {
+            0% { transform: translate3d(-2600px, 0, 0); }
+            100% { transform: translate3d(0, 0, 0); }
           }
         `
       }} />
