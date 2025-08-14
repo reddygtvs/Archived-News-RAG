@@ -97,6 +97,12 @@
   }
 
   /* Typography utilities */
+  .text-premium-xs {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    letter-spacing: -0.004em;
+  }
+
   .text-premium-sm {
     font-size: 0.875rem;
     line-height: 1.4;
@@ -241,9 +247,10 @@
   }
 
   .prose-premium p {
-    margin-bottom: 1.25rem;
-    line-height: 1.6;
+    margin-bottom: 1rem;
+    line-height: 1.5;
     color: #d4d4d8;
+    font-size: 0.875rem;
   }
 
   .prose-premium h1, .prose-premium h2, .prose-premium h3, .prose-premium h4, .prose-premium h5, .prose-premium h6 {
@@ -254,15 +261,15 @@
   }
 
   .prose-premium h1 { 
-    font-size: 1.75rem; 
+    font-size: 1.25rem; 
     letter-spacing: -0.025em;
   }
   .prose-premium h2 { 
-    font-size: 1.5rem; 
+    font-size: 1.125rem; 
     letter-spacing: -0.022em;
   }
   .prose-premium h3 { 
-    font-size: 1.25rem; 
+    font-size: 1rem; 
     letter-spacing: -0.018em;
   }
 
@@ -272,8 +279,9 @@
   }
 
   .prose-premium li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     color: #d4d4d8;
+    font-size: 0.875rem;
   }
 
   .prose-premium a {
