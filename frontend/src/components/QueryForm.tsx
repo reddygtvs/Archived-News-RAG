@@ -17,7 +17,7 @@ const QueryForm: React.FC<QueryFormProps> = ({
   onSubmit 
 }) => {
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <form onSubmit={onSubmit} className="flex justify-center">
         <div className="relative w-full max-w-2xl">
           <input

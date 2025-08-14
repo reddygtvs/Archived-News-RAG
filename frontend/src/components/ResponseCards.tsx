@@ -18,9 +18,9 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
   loading 
 }) => {
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 gap-8 max-w-full">
       {/* Standard LLM Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px', borderRadius: '8px'}} className="p-6">
+      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', minHeight: '600px', maxHeight: '80vh', borderRadius: '8px'}} className="p-6">
         <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
           Standard LLM Response
         </h2>
@@ -44,7 +44,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
       </div>
 
       {/* RAG Response */}
-      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', height: '700px', borderRadius: '8px'}} className="p-4">
+      <div style={{backgroundColor: 'rgb(25, 25, 24)', border: '1px solid rgb(55, 55, 53)', minHeight: '600px', maxHeight: '80vh', borderRadius: '8px'}} className="p-6">
         <h2 className="text-lg font-semibold text-white mb-4" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.18)'}}>
           RAG Response
           <span className="text-sm font-normal ml-2" style={{color: 'rgb(181, 179, 173)'}}>
