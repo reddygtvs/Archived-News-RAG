@@ -76,6 +76,8 @@ function App() {
       setError(`Error: ${errorMsg}`);
     } finally {
       setLoading(false);
+      // Reset query back to empty after response loads
+      setQuery("");
     }
   };
 

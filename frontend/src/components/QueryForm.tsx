@@ -22,12 +22,12 @@ const QueryForm: React.FC<QueryFormProps> = ({
         <div className="relative w-full max-w-2xl">
           <input
             type="text"
-            placeholder="Select a question from the scrolling examples above..."
+            placeholder="Pick one of the cached responses from above"
             value={query}
             onChange={onQueryChange}
             disabled={true}
             readOnly={true}
-            className="w-full px-4 py-5 pr-20 text-white placeholder-gray-400 focus:outline-none cursor-not-allowed"
+            className="w-full px-4 py-5 pr-20 text-white placeholder-gray-400 focus:outline-none cursor-not-allowed disabled:bg-gray-900"
             style={{
               backgroundColor: 'rgb(17, 17, 16)',
               border: '1px solid rgb(55, 55, 53)',
