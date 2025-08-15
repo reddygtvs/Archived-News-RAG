@@ -139,7 +139,7 @@ const ResponseCards: React.FC<ResponseCardsProps> = ({
               <div className="prose-premium">
                 <ReactMarkdown
                   components={{
-                    code: ({ children, inline }) => {
+                    code: ({ children }) => {
                       if (typeof children === 'string' && children.startsWith('SRCREF_[')) {
                         const sourceRef = children.replace('SRCREF_', '');
                         return (

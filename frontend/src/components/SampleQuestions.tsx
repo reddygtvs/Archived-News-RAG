@@ -15,15 +15,6 @@ const SampleQuestions: React.FC<SampleQuestionsProps> = ({
 }) => {
   return (
     <div className="mb-12">
-      <div className="text-center mb-8">
-        <h2 className="text-premium-xl md:text-premium-2xl font-semibold text-white tracking-tight">
-          <span className="text-white/90">Sample</span>{" "}
-          <span className="text-gradient-green">Queries</span>
-        </h2>
-        <p className="text-premium-sm text-white/60 max-w-md mx-auto">
-          Click any query to get started
-        </p>
-      </div>
 
       {/* First scroller - left to right */}
       <div className="premium-ticker-wrapper">
